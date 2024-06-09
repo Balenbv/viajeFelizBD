@@ -99,9 +99,6 @@ class ResponsableV extends Persona
 
 
 
-
-
-
     public function __toString()
     {
         return "
