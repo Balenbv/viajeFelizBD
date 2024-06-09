@@ -1,6 +1,6 @@
 <?php
 
-hola
+
 class Pasajero extends Persona
 {
     private $idViaje;
