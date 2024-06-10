@@ -5,6 +5,7 @@ include_once 'Viaje.php';
 include_once 'persona.php';
 include_once 'ResponsableV.php';
 //include_once 'Pasajero.php';
+include_once 'Empresa.php';
 
 
 /** Persona(nrodoc, apellido, nombre, telefono)  */
