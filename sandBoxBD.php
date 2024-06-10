@@ -12,23 +12,20 @@ include_once 'Empresa.php';
 $bd = new bdViajeFeliz();
 $objEmpresa = new Empresa();
 $objResponsable = new ResponsableV();
-$datos = ['documento'=>'93284672',
-          'numeroEmpleado' => 78,
-          'numeroLicencia' =>1,
-          'nombre' => 'jorge',
-          'apellido' => 'morale',
-          'ptelefono' => 92837465];
+$objPersona = new Persona();
+$datos = ['documento'=>'777',
+          'rnumeroEmpleado' => 37,
+          'rnumeroLicencia' =>1,
+          'nombre' => 'pedro',
+          'apellido' => 'roman',
+          'ptelefono' => 22222];
 
 if ($bd->iniciar()){
     $objResponsable->cargar($datos);
-    if($objResponsable->insertar()){
-        echo $objResponsable->listar();
-        echo $objResponsable;
-        echo "*****************************************************************************entro";
-    }else{
-        echo "*****************************************************************************no entro";
-    }
-
+    // $objResponsable->insertar();
+    print_r($objResponsable->listar());
+    $objResponsable->modificar();
+    print_r($objResponsable->listar());
 } else {
     echo "Conexion fallida";
 }

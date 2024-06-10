@@ -65,7 +65,7 @@ class Persona {
 	public function Buscar($documento)
 	{
 		$base = new bdViajeFeliz();
-		$consultaPersona = "Select * from persona where documento=" . $documento;
+		$consultaPersona = "SELECT * from persona where documento=" . $documento;
 		$resp = false;
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaPersona)) {
@@ -135,7 +135,7 @@ class Persona {
 	{
 		$resp = false;
 		$base = new bdViajeFeliz();
-		$consultaModifica = "UPDATE persona SET apellido='" . $this->getApellido() . "',nombre='" . $this->getNombre() . "' ,telefono='" . $this->getPTelefono() . "' WHERE documento=" . $this->getDocumento();
+		$consultaModifica = "UPDATE persona SET apellido='" . $this->getApellido() . "',nombre='" . $this->getNombre() . "' , ptelefono=" . $this->getPTelefono() . " WHERE documento= " . $this->getDocumento();
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaModifica)) {
 				$resp =  true;
