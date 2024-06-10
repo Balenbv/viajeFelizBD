@@ -16,9 +16,9 @@ $objPersona = new Persona();
 $datos = ['documento'=>'777',
           'rnumeroEmpleado' => 37,
           'rnumeroLicencia' =>1,
-          'nombre' => 'pedro',
+          'nombre' => 'Juan cruz',
           'apellido' => 'roman',
-          'ptelefono' => 22222];
+          'ptelefono' =>345634634];
 
 if ($bd->iniciar()){
     $objResponsable->cargar($datos);
