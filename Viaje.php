@@ -199,7 +199,7 @@ class Viaje
         }
         return $resp;
     }    
-    */
+    
     public function encontrarPosicionPasajero($dniParaRastrear)
     {
         $existePasajero = -1;

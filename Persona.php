@@ -1,11 +1,11 @@
 <?php
 
 class Persona {
-    private $nombre;
-    private $apellido;
-    private $documento;
-    private $ptelefono;
-    private $mensajeoperacion;
+    private $nombre;				//nombre varchar(150),
+    private $apellido;				//apellido varchar(150),
+    private $documento;				//documento varchar(15) PRIMARY KEY,
+    private $ptelefono;				//ptelefono bigint,
+    private $mensajeoperacion;	
 
     public function __construct() {
         $this->nombre = '';
@@ -42,7 +42,7 @@ class Persona {
         return $this->apellido;
     }
 
-    public function getdocumento() {
+    public function getDocumento() {
         return $this->documento;
     }
     
@@ -58,7 +58,7 @@ class Persona {
         return $this->mensajeoperacion;
     }
 
-    public function setmensajeoperacion($mensajeoperacion){
+    public function setMensajeOperacion($mensajeoperacion){
         $this->mensajeoperacion = $mensajeoperacion;
     }
     
@@ -77,14 +77,14 @@ class Persona {
 					$resp = true;
 				}
 			} else {
-				$this->setmensajeoperacion($base->getError());
+				$this->setMensajeOperacion($base->getError());
 			}
 		} else {
-			$this->setmensajeoperacion($base->getError());
+			$this->setMensajeOperacion($base->getError());
 		}
 		return $resp;
 	}
-    
+
 	public function listar($condicion = "")
 	{
 		$arregloPersona = null;
@@ -100,14 +100,14 @@ class Persona {
 				$arregloPersona = array();
 				while ($row2 = $base->Registro()) {
 					$perso = new Persona();
-					$perso->cargar($row2);
+					$perso->Buscar($row2['documento']);
 					array_push($arregloPersona, $perso);
 				}
 			} else {
-				$this->setmensajeoperacion($base->getError());
+				$this->setMensajeOperacion($base->getError());
 			}
 		} else {
-			$this->setmensajeoperacion($base->getError());
+			$this->setMensajeOperacion($base->getError());
 		}
 		return $arregloPersona;
 	}
@@ -117,21 +117,19 @@ class Persona {
 		$base = new bdViajeFeliz();
 		$resp = false;
 		$consultaInsertar = "INSERT INTO Persona(documento, apellido, nombre, ptelefono) 
-				VALUES (" . $this->getdocumento() . ",'" . $this->getApellido() . "','" . $this->getNombre() . "','" . $this->getPTelefono() . "')";
+				VALUES (" . $this->getDocumento() . ",'" . $this->getApellido() . "','" . $this->getNombre() . "','" . $this->getPTelefono() . "')";
 
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaInsertar)) {
 				$resp =  true;
 			} else {
-				$this->setmensajeoperacion($base->getError());
+				$this->setMensajeOperacion($base->getError());
 			}
 		} else {
-			$this->setmensajeoperacion($base->getError());
+			$this->setMensajeOperacion($base->getError());
 		}
 		return $resp;
 	}
-
-    
 
     public function modificar()
 	{
@@ -142,10 +140,10 @@ class Persona {
 			if ($base->Ejecutar($consultaModifica)) {
 				$resp =  true;
 			} else {
-				$this->setmensajeoperacion($base->getError());
+				$this->setMensajeOperacion($base->getError());
 			}
 		} else {
-			$this->setmensajeoperacion($base->getError());
+			$this->setMensajeOperacion($base->getError());
 		}
 		return $resp;
 	}
@@ -159,15 +157,15 @@ class Persona {
 			if ($base->Ejecutar($consultaBorra)) {
 				$resp =  true;
 			} else {
-				$this->setmensajeoperacion($base->getError());
+				$this->setMensajeOperacion($base->getError());
 			}
-		} else {
-			$this->setmensajeoperacion($base->getError());
+		} else { 
+			$this->setMensajeOperacion($base->getError());
 		}
 		return $resp;
 	}
 
     public function __toString() {
-        return "apellido: " . $this->getNombre() . "\napellido: " . $this->getApellido() . "\ndocumento: " . $this->getdocumento(). "\nptelefono: " . $this->getPTelefono();
+        return "apellido: " . $this->getNombre() . "\napellido: " . $this->getApellido() . "\ndocumento: " . $this->getDocumento(). "\nptelefono: " . $this->getPTelefono();
     }
 }

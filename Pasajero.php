@@ -1,30 +1,21 @@
 <?php
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 15d27c87dad5a18d8c2ca82c2c299cba500c2b77
 class Pasajero extends Persona
 {
-    private $idViaje;
-    
+   private $idViaje;    
 
    public function __construct()
    {
-    parent::__construct();
+    parent::__construct();  //nombre varchar(150), apellido varchar(150), documento bigint, ptelefono bigint
     $this->idViaje = '';
    }
    
-   public function cargar($datos) {
-    parent::cargar($datos); 
-    $this->setIdViaje($datos[4]);
-    }
-    /*
     public function cargar($datos) {
-        parent::cargar($datos); 
+        parent::cargar($datos);
         $this->setIdViaje($datos['idViaje']);
-        }
-    */
+    }
+
 public function setIdViaje($idViaje) {
     $this->idViaje = $idViaje;
 }
@@ -55,7 +46,7 @@ public function getIdViaje() {
     }
 
 //modificado
-    public function listar($condicion){
+    public function listar($condicion = ""){
         $arregloPasajero = [];
         $base = new bdViajeFeliz();
         $consulta = "SELECT * FROM pasajero ";
@@ -68,6 +59,7 @@ public function getIdViaje() {
                 while ($row2 = $base->Registro()) {
                     $obj = new pasajero();
                     $obj->Buscar($row2['idViaje']);
+                    $obj->cargar($row2);
                     array_push($arregloPasajero, $obj);
                 }
             } else {
@@ -91,16 +83,15 @@ public function getIdViaje() {
             if ($base->Iniciar()) {
                 if ($base->Ejecutar($consultaInsertar)) {
                     $resp = true;
-                } else {
+                }else{
                     $this->setmensajeoperacion($base->getError());
                 }
-            } else {
+            }else{
                 $this->setmensajeoperacion($base->getError());
             }
         }
         return $resp;
     }
-
 
 //modificado
     public function eliminar($idViaje)
@@ -122,7 +113,6 @@ public function getIdViaje() {
         return $resp;
     }
 
-    
 public function __toString()
 {
     $resp = parent::__toString();

@@ -2,12 +2,12 @@
 
 class ResponsableV extends Persona
 {
-    private $numeroEmpleadoInt;
-    private $numeroLicienciaInt;
+    private $numeroEmpleadoInt;         //rnumeroempleado bigint AUTO_INCREMENT,
+    private $numeroLicienciaInt;        //rnumerolicencia bigint,
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct();          //nombre varchar(150), apellido varchar(150), documento bigint, ptelefono bigint
         $this->numeroEmpleadoInt = '';
         $this->numeroLicienciaInt = '';
     }
@@ -87,6 +87,7 @@ class ResponsableV extends Persona
 				$arregloPersona = array();
 				while ($row2 = $base->Registro()) {
 					$perso = new ResponsableV();
+                    $perso->Buscar($row2['rdocumento']);
 					$perso->cargar($row2);
 					array_push($arregloPersona, $perso);
 				}
@@ -104,9 +105,8 @@ class ResponsableV extends Persona
         $base = new bdViajeFeliz();
         $resp = false;
 
-        //cuando insertamos el orden no es docu,nroEmpleado,nroLicencia sino que en la base de datos es al revez no se si influye , el parent que hay llama a la primaria como foreanea
         if (parent::insertar()) {
-            $consultaInsertar = "INSERT INTO responsable(rdocumento,rnumeroempleado , rnumerolicencia,)VALUES (" . parent::getdocumento() . ", '" . $this->getNumeroEmpleado() . "', " . $this->getNumeroLicencia() . ")";
+            $consultaInsertar = "INSERT INTO responsable(rdocumento,rnumeroempleado , rnumerolicencia,)VALUES ('" . parent::getdocumento() . "', '" . $this->getNumeroEmpleado() . "', '" . $this->getNumeroLicencia() . "')";
             if ($base->Iniciar()) {
                 if ($base->Ejecutar($consultaInsertar)) {
                     $resp = true;
