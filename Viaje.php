@@ -2,88 +2,107 @@
 
 class Viaje
 {
-    private $objResponsableVInt;
-    private $codigoViajeInt;
-    private $destinoInt;
-    private $cantidadMaximaPasajerosInt;
-    private $ColeccionObjspasajerosInt;
+    private $idViaje;                                       //idviaje bigint AUTO_INCREMENT,
+    private $destino;                                       //vdestino varchar(150),
+    private $cantidadMaximaPasajeros;                       //vcantmaxpasajeros int,
+    private $idEmpresa;                                     //idempresa bigint,
+    private $objResponsableV;                               //rnumeroempleado bigint,
+    private $importe;                                       //vimporte float,
+    private $ColeccionObjsPasajeros;
+    private $mensajeoperacion;                    
 
-    public function __construct($objResponsableVExt, $codigoViajeExt, $destinoExt, $cantidadMaximaPasajerosExt, $pasajerosExt)
+    public function __construct($objResponsableV, $idViaje, $destino, $cantidadMaximaPasajeros, $ColeccionObjsPasajeros)
     {
-        $this->objResponsableVInt = $objResponsableVExt;
-        $this->codigoViajeInt = $codigoViajeExt;
-        $this->destinoInt = $destinoExt;
-        $this->cantidadMaximaPasajerosInt = $cantidadMaximaPasajerosExt;
-        $this->ColeccionObjspasajerosInt = $pasajerosExt;
+        $this->objResponsableV = $objResponsableV;
+        $this->idViaje = $idViaje;
+        $this->destino = $destino;
+        $this->cantidadMaximaPasajeros = $cantidadMaximaPasajeros;
+        $this->ColeccionObjsPasajeros = $ColeccionObjsPasajeros;
     }
 
-    public function getResponsableV()
+    public function getIdViaje()
     {
-        return $this->objResponsableVInt;
-    }
-
-    public function getCodigoViaje()
-    {
-        return $this->codigoViajeInt;
+        return $this->idViaje;
     }
 
     public function getDestino()
     {
-        return $this->destinoInt;
+        return $this->destino;
     }
 
     public function getCantidadMaximaPasajeros()
     {
-        return $this->cantidadMaximaPasajerosInt;
+        return $this->cantidadMaximaPasajeros;
     }
 
-    public function getPasajeros()
+    public function getResponsableV()
     {
-        return $this->ColeccionObjspasajerosInt;
+        return $this->objResponsableV;
     }
 
-    public function setResponsableV($newObjResponsable)
+    public function getImporte()
     {
-        $this->objResponsableVInt = $newObjResponsable;
+        return $this->importe;
     }
 
-    public function setCodigoViaje($newCodigoViaje)
+    public function getColeccionObjsPasajeros()
     {
-        $this->codigoViajeInt = $newCodigoViaje;
+        return $this->ColeccionObjsPasajeros;
+    }
+
+    public function getmensajeoperacion()
+    {
+        return $this->mensajeoperacion;
+    }
+
+    public function setIdViaje($newIdViaje)
+    {
+        $this->idViaje = $newIdViaje;
     }
 
     public function setDestino($newDestino)
     {
-        $this->destinoInt = $newDestino;
+        $this->destino = $newDestino;
     }
 
-    public function setCantidadMaximaPasajeros($newCantidadMaxima)
+    public function setCantidadMaximaPasajeros($newCantidadMaximaPasajeros)
     {
-        $this->cantidadMaximaPasajerosInt = $newCantidadMaxima;
+        $this->cantidadMaximaPasajeros = $newCantidadMaximaPasajeros;
     }
 
-    public function setPasasejeros($newColeccion)
+    public function setResponsableV($newResponsableV)
     {
-        $this->ColeccionObjspasajerosInt = $newColeccion;
+        $this->objResponsableV = $newResponsableV;
     }
 
-    public function cantidadActualPasajeros()
+    public function setImporte($newImporte)
     {
-        return count($this->getPasajeros());
+        $this->importe = $newImporte;
     }
 
-    
-    public function Buscar($id_teatro)
+    public function setColeccionObjsPasajeros($newColeccionObjsPasajeros)
     {
-        $base = new BaseDatos();
-        $consultaPersona = "SELECT * FROM  WHERE id_teatro = " . $id_teatro;
+        $this->ColeccionObjsPasajeros = $newColeccionObjsPasajeros;
+    }
+
+    public function setmensajeoperacion($newMensajeOperacion)
+    {
+        $this->mensajeoperacion = $newMensajeOperacion;
+    }
+
+    public function Buscar($idViaje)
+    {
+        $base = new bdViajeFeliz();
+        $consulta = "SELECT * FROM viaje WHERE idviaje = " . $idViaje;
         $resp = false;
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaPersona)) {
+            if ($base->Ejecutar($consulta)) {
                 if ($row2 = $base->Registro()) {
-                    $this->setIdTeatro($id_teatro);
-                    $this->setNombre($row2['nombre']);
-                    $this->setDireccion($row2['direccion']);
+                    $this->setIdViaje($idViaje);
+                    $this->setDestino($row2['vdestino']);
+                    $this->setCantidadMaximaPasajeros($row2['vcantmaxpasajeros']);
+                    $this->setResponsableV($row2['rnumeroempleado']);
+                    $this->setImporte($row2['vimporte']);
                     $resp = true;
                 }
             } else {
@@ -94,24 +113,23 @@ class Viaje
         }
         return $resp;
     }
-    /*
-        public function listar($condicion)
+
+    public function listar($condicion = "")
     {
-        $arregloTeatro = [];
-        $base = new BaseDatos();
-        $consultaTeatro = "SELECT * FROM teatro ";
+        $arregloViaje = null;
+        $base = new bdViajeFeliz();
+        $consulta = "SELECT * FROM viaje ";
         if ($condicion != "") {
-            $consultaTeatro = $consultaTeatro . ' WHERE ' . $condicion;
+            $consulta = $consulta . ' WHERE ' . $condicion;
         }
-        $consultaTeatro .= " ORDER BY nombre";
+        $consulta .= " order by idviaje";
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaTeatro)) {
-                $arregloTeatro = [];
+            if ($base->Ejecutar($consulta)) {
+                $arregloViaje = array();
                 while ($row2 = $base->Registro()) {
-                    $id_teatro = $row2['id_teatro'];
-                    $teatro = new Teatro();
-                    $teatro->buscar($id_teatro);
-                    array_push($arregloTeatro, $teatro);
+                    $obj = new Viaje();
+                    $obj->Buscar($row2['idviaje']);
+                    array_push($arregloViaje, $obj);
                 }
             } else {
                 $this->setmensajeoperacion($base->getError());
@@ -232,14 +250,14 @@ class Viaje
 
         return $texto;
     }
-
+    
     public function __toString()
     {
         return "
 {$this->getResponsableV()}
 ************
 Datos del viaje:
-codigo del destino: {$this->getCodigoViaje()}
+codigo del destino: {$this->getIdViaje()}
 destino: {$this->getDestino()}
 cantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}
 ************
