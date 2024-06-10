@@ -54,7 +54,7 @@ class Persona {
         return $this->ptelefono;
     }
 
-    public function getmensajeoperacion(){
+    public function getMensajeOperacion(){
         return $this->mensajeoperacion;
     }
 

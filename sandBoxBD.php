@@ -1,24 +1,23 @@
 <?php
 
 include_once 'bdViajeFeliz.php';
-include_once 'Viaje.php';
-include_once 'persona.php';
-include_once 'ResponsableV.php';
+//include_once 'Viaje.php';
+//include_once 'persona.php';
+//include_once 'ResponsableV.php';
 //include_once 'Pasajero.php';
 include_once 'Empresa.php';
 
 
 /** Persona(nrodoc, apellido, nombre, telefono)  */
 $bd = new bdViajeFeliz();
-$objPersona = new Persona();
-$datos = ['nombre' =>"ls23452345o", 'apellido'=>"el 23452345ro", 'documento'=>'3436456356','ptelefono'=> 12678];
+$objEmpresa = new Empresa();
+
+$datosEmpresa = (['idEmpresa' => 2, 'enombre' => '45674', 'edireccion' => 'Call423 5']);
 
 if ($bd->iniciar()){
-    if($objPersona->Buscar('93284672')){
-        echo "Persona encontrada: \n". $objPersona;
-    } else {
-        echo "Persona no encontrada";
-    }
+   $objEmpresa->cargar($datosEmpresa);
+   $objEmpresa->insertar();
+   print_r($objEmpresa->listar());
 
 } else {
     echo "Conexion fallida";
