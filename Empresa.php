@@ -103,7 +103,7 @@ class Empresa{
         }
         $consultaEmpresas .= " order by idempresa";
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consulta)) {
+            if ($base->Ejecutar($consultaEmpresas)) {
                 $arregloEmpresas = array();
                 while ($row2 = $base->Registro()) {
                     $obj = new Empresa();
@@ -138,7 +138,7 @@ class Empresa{
     public function modificar(){
         $resp = false;
         $base = new bdViajeFeliz();
-        $consultaModificar = "UPDATE empresa SET enombre = '" . $this->getNombre() . "', edireccion = '" . $this->getDireccion() . "' WHERE idempresa = " . $this->getIdEmpresa();
+        $consultaModificar = "UPDATE empresa SET enombre = '" . $this->getNombre() . "', edireccion = '" . $this->getDireccion() . "' WHERE idempresa = '" . $this->getIdEmpresa()."'";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModificar)) {
                 $resp = true;

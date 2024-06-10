@@ -141,24 +141,24 @@ class ResponsableV extends Persona
     }
 
     //modficado
-    public function eliminar($rdocumento)
-    {
-        $base = new bdViajeFeliz();
-        $resp = false;
-        if ($base->Iniciar()) {
-            $consultaBorra = "DELETE FROM responsable WHERE rdocumento = " . parent::getdocumento();
-            if ($base->Ejecutar($consultaBorra)) {
-                if (parent::eliminar($rdocumento)) {
-                    $resp = true;
-                }
-            } else {
-                $this->setmensajeoperacion($base->getError());
-            }
-        } else {
-            $this->setmensajeoperacion($base->getError());
-        }
-        return $resp;
-    }
+    // public function eliminar($rdocumento)
+    // {
+    //     $base = new bdViajeFeliz();
+    //     $resp = false;
+    //     if ($base->Iniciar()) {
+    //         $consultaBorra = "DELETE FROM responsable WHERE rdocumento = " . parent::getdocumento();
+    //         if ($base->Ejecutar($consultaBorra)) {
+    //             if (parent::eliminar($rdocumento)) {
+    //                 $resp = true;
+    //             }
+    //         } else {
+    //             $this->setmensajeoperacion($base->getError());
+    //         }
+    //     } else {
+    //         $this->setmensajeoperacion($base->getError());
+    //     }
+    //     return $resp;
+    // }
 
 
     public function __toString()
