@@ -11,15 +11,27 @@ class Viaje
     private $ColeccionObjsPasajeros;
     private $mensajeoperacion;                    
 
-    public function __construct($objResponsableV, $idViaje, $destino, $cantidadMaximaPasajeros, $ColeccionObjsPasajeros)
+    public function __construct()
     {
-        $this->objResponsableV = $objResponsableV;
-        $this->idViaje = $idViaje;
-        $this->destino = $destino;
-        $this->cantidadMaximaPasajeros = $cantidadMaximaPasajeros;
-        $this->ColeccionObjsPasajeros = $ColeccionObjsPasajeros;
+        $this->objResponsableV ='' ;
+        $this->idViaje = '';
+        $this->destino = '';
+        $this->cantidadMaximaPasajeros ='' ;
+        $this->ColeccionObjsPasajeros = [];
     }
 
+    public function cargar($datos)
+    {
+        $this->setIdViaje($datos['idViaje']);
+        $this->setDestino($datos['destino']);
+        $this->setCantidadMaximaPasajeros($datos['cantidadMaximaPasajeros']);
+        $this->setIdEmpresa($datos['idEmpresa']); 
+        $this->setResponsableV($datos['numeroEmpleado']);
+        $this->setImporte($datos['importe']);
+        $this->setColeccionObjsPasajeros($datos['ColeccionObjsPasajeros']);
+        $this->setmensajeoperacion($datos['mensajeoperacion']);
+    }
+    
     public function getIdViaje()
     {
         return $this->idViaje;
@@ -53,6 +65,16 @@ class Viaje
     public function getmensajeoperacion()
     {
         return $this->mensajeoperacion;
+    }
+
+    public function getIdEmpresa()
+    {
+        return $this->idEmpresa;
+    }  
+    
+    public function setIdEmpresa($newIdEmpresa)
+    {
+        $this->idEmpresa = $newIdEmpresa;
     }
 
     public function setIdViaje($newIdViaje)
@@ -93,10 +115,10 @@ class Viaje
     public function Buscar($idViaje)
     {
         $base = new bdViajeFeliz();
-        $consulta = "SELECT * FROM viaje WHERE idviaje = " . $idViaje;
+        $consultaViaje = "SELECT * FROM viaje WHERE idviaje=" . $idViaje;
         $resp = false;
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consulta)) {
+            if ($base->Ejecutar($consultaViaje)) {
                 if ($row2 = $base->Registro()) {
                     $this->setIdViaje($idViaje);
                     $this->setDestino($row2['vdestino']);
@@ -116,7 +138,7 @@ class Viaje
 
     public function listar($condicion = "")
     {
-        $arregloViaje = null;
+        $arreglo = null;
         $base = new bdViajeFeliz();
         $consulta = "SELECT * FROM viaje ";
         if ($condicion != "") {
@@ -125,11 +147,11 @@ class Viaje
         $consulta .= " order by idviaje";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
-                $arregloViaje = array();
+                $arreglo = array();
                 while ($row2 = $base->Registro()) {
                     $obj = new Viaje();
                     $obj->Buscar($row2['idviaje']);
-                    array_push($arregloViaje, $obj);
+                    array_push($arreglo, $obj);
                 }
             } else {
                 $this->setmensajeoperacion($base->getError());
@@ -137,39 +159,35 @@ class Viaje
         } else {
             $this->setmensajeoperacion($base->getError());
         }
-        return $arregloTeatro;
+        return $arreglo;
     }
+    
 
     public function insertar()
     {
-        $base = new BaseDatos();
+        $base = new bdViajeFeliz();
         $resp = false;
-        $nombre = $this->getNombre();
-        $direccion = $this->getDireccion();
-
-        $consulta_insertar = "INSERT INTO teatro(nombre, direccion)
-		VALUES ('{$nombre}', '{$direccion}')";
-
-        //debbugin
-        //echo "\n".$consulta_insertar."\n";
+        $consultaInsertar = "INSERT INTO viaje(idviaje,vdestino, vcantmaxpasajeros,idempresa,rnumeroempleado,vimporte) VALUES 
+        (" . $this->getIdViaje() . ",'" . $this->getDestino() . "'," . $this->getCantidadMaximaPasajeros() . "," . $this->getIdEmpresa() . "," . $this->getResponsableV(). "," . $this->getImporte() . ")";
+        //consulta de delegacion con getResponsableV
+        
         if ($base->Iniciar()) {
-            if ($id = $base->devuelveIDInsercion($consulta_insertar)) {
-                $this->setIdTeatro($id);
+            if ($base->Ejecutar($consultaInsertar)) {
                 $resp = true;
             } else {
-                $this->setMensajeOperacion($base->getError());
+                $this->setmensajeoperacion($base->getError());
             }
         } else {
-            $this->setMensajeOperacion($base->getError());
+            $this->setmensajeoperacion($base->getError());
         }
         return $resp;
     }
 
-    public function modificar($id_teatro)
+    public function modificar()
     {
         $resp = false;
-        $base = new BaseDatos();
-        $consultaModifica = "UPDATE teatro SET nombre = '" . $this->getNombre() . "', direccion = '" . $this->getDireccion() . "' WHERE id_teatro = " . $id_teatro;
+        $base = new bdViajeFeliz();
+        $consultaModifica = "UPDATE viaje SET vdestino='" . $this->getDestino() . "', vcantmaxpasajeros=" . $this->getCantidadMaximaPasajeros() . ", rnumeroempleado=" . $this->getResponsableV() . ", vimporte=" . $this->getImporte() . " WHERE idviaje=" . $this->getIdViaje();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
@@ -182,13 +200,12 @@ class Viaje
         return $resp;
     }
 
-
     public function eliminar()
     {
-        $base = new BaseDatos();
+        $base = new bdViajeFeliz();
         $resp = false;
         if ($base->Iniciar()) {
-            $consultaBorra = "DELETE FROM teatro WHERE id_teatro = " . $this->getIdTeatro();
+            $consultaBorra = "DELETE FROM viaje WHERE idviaje=" . $this->getIdViaje();
             if ($base->Ejecutar($consultaBorra)) {
                 $resp = true;
             } else {
@@ -198,58 +215,9 @@ class Viaje
             $this->setmensajeoperacion($base->getError());
         }
         return $resp;
-    }    
+    }
     
-    public function encontrarPosicionPasajero($dniParaRastrear)
-    {
-        $existePasajero = -1;
-        $seEncontro = false;
-        for ($i = 0; $i < $this->cantidadActualPasajeros() && $seEncontro != true; $i++) {
-            if ($this->getPasajeros()[$i]->getNumeroDocumento() == $dniParaRastrear) {
-                $existePasajero = $i;
-                $seEncontro = true;
-            }
-        }
-        return $existePasajero;
-    }
 
-    public function modificarPasajero($numeroDniPasajero, $newNombre, $newApellido, $newNuevoTelefono)
-    {
-        $pasajero = 'no hay pasajero con ese dni';
-
-        if ($this->encontrarPosicionPasajero($numeroDniPasajero) != -1) {
-            $this->getPasajeros()[$this->encontrarPosicionPasajero($numeroDniPasajero)]->setNombre($newNombre);
-            $this->getPasajeros()[$this->encontrarPosicionPasajero($numeroDniPasajero)]->setApellido($newApellido);
-            $this->getPasajeros()[$this->encontrarPosicionPasajero($numeroDniPasajero)]->setNumeroTelefono($newNuevoTelefono);
-
-            $pasajero = $this->getPasajeros()[$this->encontrarPosicionPasajero($numeroDniPasajero)];
-        }
-        return $pasajero;
-    }
-
-    public function cambiarResponsable($numeroLicencia, $numEmpleado, $nombre, $apellido)
-    {
-        $responsable = 'no hay responsable con ese numero de licencia';
-        if ($this->getResponsableV()->getNumeroLicencia() == $numeroLicencia) {
-            $this->getResponsableV()->setNombre($nombre);
-            $this->getResponsableV()->setApellido($apellido);
-            $this->getResponsableV()->setNumeroEmpleado($numEmpleado);
-            $responsable = $this->getResponsableV();
-        }
-        return $responsable;
-    }
-
-    public function mostrarPasajeros()
-    {
-        $texto = "";
-        $i=1;
-        foreach ($this->getPasajeros() as $pasajeroIndividual) {
-            $texto .= "pasajero ". $i .": ". $pasajeroIndividual . "\n";
-            $i++;
-        }
-
-        return $texto;
-    }
     
     public function __toString()
     {
