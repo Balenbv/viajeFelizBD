@@ -24,16 +24,26 @@ public function getIdViaje() {
     return $this->idViaje;
 }
 
+public function getmensajeoperacion(){
+    return $this->mensajeoperacion;
+}
+
+public function setmensajeoperacion($mensajeoperacion)
+{
+    $this->mensajeoperacion = $mensajeoperacion;
+}
+
 //modificado
-    public function Buscar($idViaje)
+    public function Buscar($documento)
     {
         $base = new bdViajeFeliz();
-        $consulta = "SELECT * FROM pasajero WHERE idViaje = " . $idViaje;
+        $consulta = "SELECT * FROM pasajero WHERE pdocumento = " . $documento;
         $resp = false;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
                 if ($row2 = $base->Registro()) {
-                    parent::Buscar($idViaje);
+                    parent::Buscar($documento);
+                    $this->setIdViaje($row2['idviaje']);
                     $resp = true;
                 }
             } else {
@@ -53,13 +63,13 @@ public function getIdViaje() {
         if ($condicion != "") {
             $consulta = $consulta . ' WHERE ' . $condicion;
         }
+        $consulta .= " order by pdocumento ";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
                 $arregloPasajero = array();
                 while ($row2 = $base->Registro()) {
                     $obj = new pasajero();
-                    $obj->Buscar($row2['idViaje']);
-                    $obj->cargar($row2);
+                    $obj->Buscar($row2['pdocumento']);
                     array_push($arregloPasajero, $obj);
                 }
             } else {
@@ -79,7 +89,8 @@ public function getIdViaje() {
         $resp = false;
 
         if (parent::insertar()) {
-            $consultaInsertar = "INSERT INTO pasajero(idViaje) VALUES (" . parent::getIdViaje() . ")";
+            $consultaInsertar = "INSERT INTO pasajero(pdocumento, idviaje ) VALUE
+             ('" .  parent::getDocumento() . "'," . $this->getIdViaje().")";
             if ($base->Iniciar()) {
                 if ($base->Ejecutar($consultaInsertar)) {
                     $resp = true;
@@ -93,15 +104,15 @@ public function getIdViaje() {
         return $resp;
     }
 
-//modificado
-    public function eliminar($idViaje)
+
+    public function eliminar() 
     {
         $base = new bdViajeFeliz();
         $resp = false;
         if ($base->Iniciar()) {
-            $consultaBorra = "DELETE FROM pasajero WHERE idViaje = " . parent::getIdViaje();
+            $consultaBorra = "DELETE FROM pasajero WHERE pdocumento =" . parent::getDocumento();
             if ($base->Ejecutar($consultaBorra)) {
-                if (parent::eliminar($idViaje)) {
+                if (parent::eliminar()) {
                     $resp = true;
                 }
             } else {
