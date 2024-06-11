@@ -22,6 +22,7 @@ $datos = ['documento'=>'93284672',
 
 
 if ($bd->iniciar()){
+    $objResponsable->listar();
     $objResponsable->cargar($datos);
     $objResponsable->eliminar();
     $objResponsable->listar();
