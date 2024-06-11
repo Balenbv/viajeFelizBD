@@ -13,19 +13,18 @@ $bd = new bdViajeFeliz();
 $objEmpresa = new Empresa();
 $objResponsable = new ResponsableV();
 $objPersona = new Persona();
-$datos = ['documento'=>'777',
-          'rnumeroEmpleado' => 37,
+$datos = ['documento'=>'93284672',
+          'rnumeroEmpleado' => 3,
           'rnumeroLicencia' =>1,
-          'nombre' => 'Juan cruz',
+          'nombre' => 'peruanin',
           'apellido' => 'roman',
-          'ptelefono' =>345634634];
+          'ptelefono' =>77];
+
 
 if ($bd->iniciar()){
     $objResponsable->cargar($datos);
-    // $objResponsable->insertar();
-    print_r($objResponsable->listar());
-    $objResponsable->modificar();
-    print_r($objResponsable->listar());
+    $objResponsable->eliminar();
+    $objResponsable->listar();
 } else {
     echo "Conexion fallida";
 }
