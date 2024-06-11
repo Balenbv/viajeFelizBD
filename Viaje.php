@@ -231,4 +231,5 @@ cantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}
 ************
 {$this->mostrarPasajeros()}";
     }
+    
 }
