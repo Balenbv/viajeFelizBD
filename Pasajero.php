@@ -104,6 +104,24 @@ public function setmensajeoperacion($mensajeoperacion)
         return $resp;
     }
 
+    public function modificar(){
+        $resp = false;
+        $base = new bdViajeFeliz();
+        if (parent::modificar()) {
+            $consultaModificar = "UPDATE pasajero SET idviaje = " . $this->getIdViaje() . " WHERE pdocumento = " . parent::getDocumento();
+            if ($base->Iniciar()) {
+                if ($base->Ejecutar($consultaModificar)) {
+                    $resp = true;
+                }else{
+                    $this->setmensajeoperacion($base->getError());
+                }
+            }else{
+                $this->setmensajeoperacion($base->getError());
+            }
+        }
+        return $resp;
+    }
+
 
     public function eliminar() 
     {

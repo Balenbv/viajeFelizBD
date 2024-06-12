@@ -28,8 +28,6 @@ class Viaje
         $this->setIdEmpresa($datos['idEmpresa']); 
         $this->setResponsableV($datos['numeroEmpleado']);
         $this->setImporte($datos['importe']);
-        $this->setColeccionObjsPasajeros($datos['ColeccionObjsPasajeros']);
-        $this->setmensajeoperacion($datos['mensajeoperacion']);
     }
     
     public function getIdViaje()
@@ -55,11 +53,6 @@ class Viaje
     public function getImporte()
     {
         return $this->importe;
-    }
-
-    public function getColeccionObjsPasajeros()
-    {
-        return $this->ColeccionObjsPasajeros;
     }
 
     public function getmensajeoperacion()
@@ -100,11 +93,6 @@ class Viaje
     public function setImporte($newImporte)
     {
         $this->importe = $newImporte;
-    }
-
-    public function setColeccionObjsPasajeros($newColeccionObjsPasajeros)
-    {
-        $this->ColeccionObjsPasajeros = $newColeccionObjsPasajeros;
     }
 
     public function setmensajeoperacion($newMensajeOperacion)
@@ -217,7 +205,6 @@ class Viaje
         return $resp;
     }
     
-
     
     public function __toString()
     {
