@@ -153,7 +153,7 @@ class Persona {
 		$base = new bdViajeFeliz();
 		$resp = false;
 		if ($base->Iniciar()) {
-			$consultaBorra = "DELETE FROM persona WHERE documento=" . $this->getDocumento();
+			$consultaBorra = "DELETE FROM persona WHERE documento='" . $this->getDocumento()."'";
 			if ($base->Ejecutar($consultaBorra)) {
 				$resp =  true;
 			} else {

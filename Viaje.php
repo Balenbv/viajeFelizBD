@@ -6,8 +6,7 @@ class Viaje
     private $destino;                                       //vdestino varchar(150),
     private $cantidadMaximaPasajeros;                       //vcantmaxpasajeros int,
     private $idEmpresa;                                     //idempresa bigint,
-    private $objResponsableV;                               //rnumeroempleado bigint,
-    private $importe;                                       //vimporte float,
+    private $objResponsableV;                               //rnumeroempleado bigint,                                      //vimporte float,
     private $ColeccionObjsPasajeros;
     private $mensajeoperacion;                    
 
@@ -27,7 +26,7 @@ class Viaje
         $this->setCantidadMaximaPasajeros($datos['cantidadMaximaPasajeros']);
         $this->setIdEmpresa($datos['idEmpresa']); 
         $this->setResponsableV($datos['numeroEmpleado']);
-        $this->setImporte($datos['importe']);
+        $this->setColeccionPasajero($datos['coleccionPasajeros']);
     }
     
     public function getIdViaje()
@@ -50,9 +49,9 @@ class Viaje
         return $this->objResponsableV;
     }
 
-    public function getImporte()
+    public function getColeccionObjsPasajeros()
     {
-        return $this->importe;
+        return $this->ColeccionObjsPasajeros;
     }
 
     public function getmensajeoperacion()
@@ -64,6 +63,10 @@ class Viaje
     {
         return $this->idEmpresa;
     }  
+
+    public function setColeccionPasajero($newColeccionPasajero){
+        $this->ColeccionObjsPasajeros = $newColeccionPasajero;
+    }
     
     public function setIdEmpresa($newIdEmpresa)
     {
@@ -90,16 +93,12 @@ class Viaje
         $this->objResponsableV = $newResponsableV;
     }
 
-    public function setImporte($newImporte)
-    {
-        $this->importe = $newImporte;
-    }
-
     public function setmensajeoperacion($newMensajeOperacion)
     {
         $this->mensajeoperacion = $newMensajeOperacion;
     }
 
+    /*metodos de sql*/
     public function Buscar($idViaje)
     {
         $base = new bdViajeFeliz();
@@ -111,8 +110,7 @@ class Viaje
                     $this->setIdViaje($idViaje);
                     $this->setDestino($row2['vdestino']);
                     $this->setCantidadMaximaPasajeros($row2['vcantmaxpasajeros']);
-                    $this->setResponsableV($row2['rnumeroempleado']);
-                    $this->setImporte($row2['vimporte']);
+                    $this->setResponsableV($row2['rnumeroempleado']); 
                     $resp = true;
                 }
             } else {
@@ -147,16 +145,16 @@ class Viaje
         } else {
             $this->setmensajeoperacion($base->getError());
         }
+
         return $arreglo;
     }
-    
 
     public function insertar()
     {
         $base = new bdViajeFeliz();
         $resp = false;
-        $consultaInsertar = "INSERT INTO viaje(idviaje,vdestino, vcantmaxpasajeros,idempresa,rnumeroempleado,vimporte) VALUES 
-        (" . $this->getIdViaje() . ",'" . $this->getDestino() . "'," . $this->getCantidadMaximaPasajeros() . "," . $this->getIdEmpresa() . "," . $this->getResponsableV(). "," . $this->getImporte() . ")";
+        $consultaInsertar = "INSERT INTO viaje(idviaje,vdestino, vcantmaxpasajeros,idempresa,rnumeroempleado) VALUES 
+        ('" . $this->getIdViaje() . "','" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "','" . $this->getIdEmpresa() . "','" . $this->getResponsableV(). "')";
         //consulta de delegacion con getResponsableV
         
         if ($base->Iniciar()) {
@@ -168,6 +166,7 @@ class Viaje
         } else {
             $this->setmensajeoperacion($base->getError());
         }
+
         return $resp;
     }
 
@@ -176,6 +175,7 @@ class Viaje
         $resp = false;
         $base = new bdViajeFeliz();
         $consultaModifica = "UPDATE viaje SET vdestino='" . $this->getDestino() . "', vcantmaxpasajeros=" . $this->getCantidadMaximaPasajeros() . ", rnumeroempleado=" . $this->getResponsableV() . ", vimporte=" . $this->getImporte() . " WHERE idviaje=" . $this->getIdViaje();
+        
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
@@ -185,6 +185,7 @@ class Viaje
         } else {
             $this->setmensajeoperacion($base->getError());
         }
+
         return $resp;
     }
 
@@ -192,6 +193,7 @@ class Viaje
     {
         $base = new bdViajeFeliz();
         $resp = false;
+
         if ($base->Iniciar()) {
             $consultaBorra = "DELETE FROM viaje WHERE idviaje=" . $this->getIdViaje();
             if ($base->Ejecutar($consultaBorra)) {
@@ -204,8 +206,231 @@ class Viaje
         }
         return $resp;
     }
+
+    /*fin de los metodos de sql*/
+    /*Pasajero*/   
+    
+    public function hayPasajesDisponibles(){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $consulta = "SELECT count(*) as cantidadPasajes FROM pasajero WHERE idviaje = '" . $this->getIdViaje()."'";
+        $resp = false;
+
+        if ($base->Iniciar()) {
+            if ($base->Ejecutar($consulta)) {
+                if ($row2 = $base->Registro()) {
+                    if ($row2['cantidadPasajes'] < $this->getCantidadMaximaPasajeros()) {
+
+                        $resp = true;
+                    }
+                }
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+        return $resp;
+    }
+
+    public function mostrarPasajeros(){
+        //TESTEADO 
+        $base = new bdViajeFeliz();
+        $consulta = "SELECT * FROM pasajero WHERE idviaje = '" . $this->getIdViaje()."'";
+        $resp = false;
+        $coleccionPasajero = [];
+
+        if ($base->Iniciar()) {
+
+            if ($base->Ejecutar($consulta)) {
+                $pasajero = new Pasajero();
+                $coleccionPasajero = $pasajero->listar();
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+        return $coleccionPasajero;
+    }
+
+    public function existePersona($dni){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $consulta = "SELECT * FROM persona WHERE documento = " . $dni;
+        $resp = false;
+
+        if ($base->Iniciar()) {
+            if ($base->Ejecutar($consulta)) {
+                if ($row2 = $base->Registro()) {
+                    $resp = true;
+                }
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+        return $resp;
+        
+    }
+        
+        
+
+    public function crearPasajero($datos){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $booleano = true;
+        $pasajero = new Pasajero();
+
+        if($base->Iniciar()){
+            $pasajero->cargar($datos);
+
+            if ($pasajero->insertar()) {
+                $coleccionPasajeros = $this->getColeccionObjsPasajeros();
+                array_push($coleccionPasajeros, $pasajero);
+                $this->setColeccionPasajero($coleccionPasajeros);
+                $booleano = true;
+
+            } else {
+
+                $booleano = false;
+
+            }
+        }else{
+            $this->setmensajeoperacion($base->getError());
+        }
+        return $booleano;
+    }
+
+    public function modificarPasajero($datos){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $bandera = false;
+
+        if($base->iniciar()){
+
+            $pasajero = new Pasajero();
+            $pasajero->cargar($datos);
+
+            if($pasajero->modificar()){
+                $bandera = true;
+            }else{
+                $this->setmensajeoperacion($base->getError());
+            }
+
+        }else{
+            $this->setmensajeoperacion($base->getError());
+        }
+
+        return $bandera;
+    }
+
+    public function eliminarPasajero($datos){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $resp = false;
+        $pasajero = new Pasajero();
+
+        if ($base->Iniciar()) {
+            $pasajero->cargar($datos);
+            $pasajero->eliminar();
+
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+
+        return $resp;
+    }
+
+    /*--- RESPONSABLE ---*/
+    public function crearResponsableV($datos){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $booleano = true;
+        $responsable = new ResponsableV();
+
+        if($base->Iniciar()){
+            $responsable->cargar($datos);
+            if ($responsable->insertar()) {
+                $this->setResponsableV($responsable);
+                $booleano = true;
+            } else {
+                $booleano = false;
+                setmensajeoperacion($base->getError());
+            }
+        }else{
+            $this->setmensajeoperacion($base->getError());
+        }
+
+        return $booleano;
+    } 
+
     
     
+    public function modificarResponsable($datos){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $bandera = false;
+
+        if($base->iniciar()){
+            $responsable = new ResponsableV();
+            $responsable->cargar($datos);
+
+            if($responsable->modificar()){
+                $bandera = true;
+            }else{
+                $this->setmensajeoperacion($base->getError());
+            }
+
+        }else{
+            $this->setmensajeoperacion($base->getError());
+        }
+
+        return $bandera;
+    }
+
+    public function mostrarResponsable(){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $objResponsableV = null;
+        
+        if($base->iniciar()){
+            $responsable = new ResponsableV();
+            if($coleccionResponsables = $responsable->listar()){
+                $i=0;
+                while($objResponsableV == null && $i<count($coleccionResponsables)){
+                    if($coleccionResponsables[$i]->getNumeroEmpleado() == $this->getResponsableV()){
+                        $objResponsableV = $coleccionResponsables[$i];
+                    }
+                    $i++;
+                }
+            }else{
+                $this->setmensajeoperacion($base->getError());
+            }
+        }else{
+            $this->setmensajeoperacion($base->getError());
+        }
+        
+    return $objResponsableV;
+    }
+        
+    public function eliminarResponsable($datos){
+       // CASI TESTEADO
+        $base = new bdViajeFeliz();
+        $resp = false;
+        $responsable = new responsableV();
+    
+        if ($base->Iniciar()) {
+            $responsable->cargar($datos);
+            $responsable->eliminar();
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+    
+        return $resp;
+    }
+
     public function __toString()
     {
         return "

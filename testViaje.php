@@ -46,7 +46,7 @@ $elViajePersonalizadoEstaCreado = false;
 
 
 do {
-    echo "\ningrese una opcion:\n
+    echo "\nIngrese una opcion:\n
     1) modificar datos de un viaje precargado\n
     2) crear desde 0 un viaje\n
     3) ver los datos actuales del viaje\n
@@ -148,7 +148,7 @@ do {
                     case 3:
                         if ($elViajePersonalizadoEstaCreado == true) {
                             echo "ingrese los nuevos datos del responsable";
-                            echo "\nIngrese su numero de licencia apra identificarlo: ";
+                            echo "\nIngrese su numero de licencia para identificarlo: ";
                             $numeroLicencia = trim(fgets(STDIN));
                             echo "Su nuevo nombre: ";
                             $nombre = trim(fgets(STDIN));

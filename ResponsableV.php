@@ -136,7 +136,7 @@ class ResponsableV extends Persona
         $base = new bdViajeFeliz();
         $resp = false;
         if ($base->Iniciar()){
-            $consultaBorra = "DELETE FROM Responsable WHERE rdocumento=". parent::getDocumento();
+            $consultaBorra = "DELETE FROM Responsable WHERE rdocumento='". parent::getDocumento()."'";
             if ($base->Ejecutar($consultaBorra)){
                 if (parent::eliminar()){
                     $resp =  true;
