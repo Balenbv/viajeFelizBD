@@ -98,6 +98,10 @@ class Viaje
         $this->mensajeoperacion = $newMensajeOperacion;
     }
 
+    public function cantidadPasajerosActual(){
+        return count($this->ColeccionObjsPasajeros);
+    }
+
     /*metodos de sql*/
     public function Buscar($idViaje)
     {
@@ -440,8 +444,8 @@ Datos del viaje:
 codigo del destino: {$this->getIdViaje()}
 destino: {$this->getDestino()}
 cantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}
-************
-{$this->mostrarPasajeros()}";
+************".
+print_r($this->mostrarPasajeros());
     }
     
 }

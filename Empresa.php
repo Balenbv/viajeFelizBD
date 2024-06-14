@@ -166,4 +166,49 @@ class Empresa{
         }
         return $resp;
     }
+
+    public function mostrarViajes(){
+        $coleccionViajes = $this->getColeccionViajes();
+        $mostrar = "Viajes de la empresa: \n";
+        $i=1;
+        foreach ($coleccionViajes as $viaje) {
+            $mostrar .= $viaje . "nro: $i\n";
+            $i++;
+        }
+        return $mostrar;
+    }
+
+    public function crearViaje($datos){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $booleano = true;
+        $viaje = new Viaje();
+    
+        if($base->Iniciar()){
+            $viaje->cargar($datos);
+    
+            if ($viaje->insertar()) {
+                $coleccionViajes = $this->getColeccionViajes();
+                array_push($coleccionViajes, $viaje);
+                $this->setColeccionViajes($coleccionViajes);
+                $booleano = true;
+    
+            } else {
+    
+                $booleano = false;
+    
+            }
+        }else{
+            $this->setmensajeoperacion($base->getError());
+        }
+        return $booleano;
+    }
+
+    public function __toString()
+    {
+        return "Id Empresa: " . $this->getIdEmpresa() . "\n" .
+               "Nombre: " . $this->getNombre() . "\n" .
+               "Direccion: " . $this->getDireccion()."\n".
+               "coleccion de viajes: " . $this->mostrarViajes() . "\n";
+    }
 }
