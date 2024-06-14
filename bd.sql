@@ -11,7 +11,7 @@ create table persona(
     nombre varchar(150),
     apellido varchar(150),
     documento varchar(15) PRIMARY KEY,
-    ptelefono varchar(15),
+    ptelefono varchar(15)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
 
 CREATE TABLE responsable (
@@ -30,7 +30,7 @@ CREATE TABLE viaje (
     rnumeroempleado varchar(15),
     PRIMARY KEY (idviaje),
     FOREIGN KEY (idempresa) REFERENCES empresa (idempresa),
-    FOREIGN KEY (rnumeroempleado) REFERENCES responsable (rnumeroempleado) ON UPDATE CASCADE ON DELETE RESTRICT
+    FOREIGN KEY (rnumeroempleado) REFERENCES responsable (rnumeroempleado) ON UPDATE CASCADE ON DELETE set null
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
 
 CREATE TABLE pasajero (
