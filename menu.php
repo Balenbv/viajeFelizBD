@@ -13,7 +13,6 @@ $datosEmpresa = [
     'enombre' => 'empresa1',
     'edireccion' => 'Lagos del Rios'
 ];
-
 $datosPasajero = [
     ['nombre' => 'Jorge', 'apellido' => 'Messi', 'documento' => '5', 'ptelefono' => '1556', 'idViaje' => '1'],
     ['nombre' => 'Luis', 'apellido' => 'Suarez', 'documento' => '10', 'ptelefono' => '1557', 'idViaje' => '1'],
