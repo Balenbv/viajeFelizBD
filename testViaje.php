@@ -24,10 +24,8 @@ include 'Pasajero.php';
 
     function menuMostrarDatosEmpresa(){
         $array = [
-            1 => "datos de el viaje",
-            2 => "datos de el reponsable",
-            3 => "datos de el pasajeros ",
-            4 => "datos de la empresa"];
+            1 => "ver datos de la empresa",
+            2 => "ver datos de un vuelo"];
             
             $mostrar = "Elija una opcion: \n";
             
@@ -69,10 +67,10 @@ function menuPrincipalAvanzado(){
 do{
     echo menuPrincipal();
     $opcion = trim(fgets(STDIN));
-    /*1 => "crear una empresa desde O",
-      2 => "ver datos actuales de la empresa",
-      3 => "salir
-    */
+    //1 => "crear una empresa desde O",
+    //   2 => "ver datos actuales de la empresa",
+    //   3 => "salir
+    
     switch ($opcion) {
         /*1 => "crear una empresa desde O*/
         case 1:
@@ -149,7 +147,7 @@ do{
                     $objViaje->crearPasajero($datos);
                 }
 
-                echo $objEmpresa;
+                
 
             } else{
                 echo "No se pudo iniciar la base de datos\n";

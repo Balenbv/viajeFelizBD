@@ -1,5 +1,4 @@
 <?php
-
 include_once 'bdViajeFeliz.php';
 include_once 'Viaje.php';
 include_once 'persona.php';
@@ -9,106 +8,64 @@ include_once 'Empresa.php';
 
 
 $bd = new bdViajeFeliz();
-$objPersona = new Persona();
+if ($bd->Iniciar()){
+    $objPersona = new Persona();
+    $objViaje = new Viaje();
+    $objResponsable = new ResponsableV();
+    $objPasajero = new Pasajero();
+    $objEmpresa = new Empresa();
 
-$objEmpresa = new Empresa();
-$datosEmpresa = [
-    'idEmpresa'=>'1',
-    'enombre'=>'empresa1',
-    'edireccion'=>'Lagos del Rios'
-];
-
-$datosEmpleado = ['nombre'=>'Di5346ego','apellido'=>'Ri345os', 'ptelefono'=>'123456456', 'documento' => '78', 'rnumeroEmpleado' => '1', 'rnumeroLicencia' => '1546'];
-$datosViaje = ['idViaje'=> '1', 'destino'=>'Cordoba','cantidadMaximaPasajeros'=> '100', 'idEmpresa'=> '1','numeroEmpleado'=> '3','coleccionPasajeros'=>[]];
-$datosPasajero = ['nombre'=>'jorge','apellido' => 'mes65si','documento'=> '5','ptelefono'=> '1556', 'idViaje'=> '5'];
-
-if($bd->iniciar()){
-    $objEmpresa->cargar($datosEmpresa);
-    $objEmpresa->insertar();
-    $objEmpresa->listar();
-} else {
-    echo "Conexion fallida";
+    do {
+        echo 'Ingrese los datos';
+        $opcion = trim(fgets(STDIN));
+        switch($opcion){
+            case 1:
+                $datosEmpresa = ['idEmpresa' => '2','enombre' => 'empresa1','edireccion' => 'Lagos del Rios'];
+                $datosPasajero = [
+                    ['nombre' => 'Jorge', 'apellido' => 'Messi', 'documento' => '11', 'ptelefono' => '1556', 'idViaje' => '2'],
+                    ['nombre' => 'Luis', 'apellido' => 'Suarez', 'documento' => '12', 'ptelefono' => '1557', 'idViaje' => '2'],
+                    ['nombre' => 'Neymar', 'apellido' => 'Jr', 'documento' => '13', 'ptelefono' => '1558', 'idViaje' => '2'],
+                    ['nombre' => 'Kylian', 'apellido' => 'Mbappe', 'documento' => '14', 'ptelefono' => '1559', 'idViaje' => '2'],
+                    ['nombre' => 'Lionel', 'apellido' => 'Messi', 'documento' => '15', 'ptelefono' => '1560', 'idViaje' => '2'],
+                    ['nombre' => 'Cristiano', 'apellido' => 'Ronaldo', 'documento' => '16', 'ptelefono' => '1561', 'idViaje' => '2'],
+                    ['nombre' => 'Robert', 'apellido' => 'Lewandowski', 'documento' => '17', 'ptelefono' => '1562', 'idViaje' => '2'],
+                    ['nombre' => 'Kevin', 'apellido' => 'De Bruyne', 'documento' => '18', 'ptelefono' => '1563', 'idViaje' => '2'],
+                    ['nombre' => 'Golo', 'apellido' => 'Kante', 'documento' => '19', 'ptelefono' => '1564', 'idViaje' => '2'],
+                    ['nombre' => 'Mohamed', 'apellido' => 'Salah', 'documento' => '20', 'ptelefono' => '1565', 'idViaje' => '2']];
+                
+                $datosResonsable = ['documento' => '93284673','rnumeroEmpleado' => '7','rnumeroLicencia' => '1','nombre' => 'Homero','apellido' => 'Simpson','ptelefono' => '77'];
+                
+                $datosViaje = ['idViaje' => '2','destino' => 'Cordoba','cantidadMaximaPasajeros' => '100','idEmpresa' => '2','numeroEmpleado' => '7','coleccionPasajeros' => $datosPasajero];
+            
+                    $objEmpresa = new Empresa();
+                    $objEmpresa->cargar($datosEmpresa);
+                    $objEmpresa->insertar();
+            
+                    $objPersona = new Persona();
+            
+                    $objResponsable = new ResponsableV();
+                    $objResponsable->cargar($datosResonsable);
+                    $objResponsable->insertar();
+            
+                    $objViaje = new Viaje();
+                    $objViaje->cargar($datosViaje);
+                    $objViaje->insertar();
+            
+                    foreach ($datosPasajero as $pasajero) {
+                        $objPasajero = new Pasajero();
+                        $objPasajero->cargar($pasajero);
+                        $objPasajero->insertar();
+                    }
+                
+                break;
+            case 2:
+                echo 'ingrese la empresa de la que quiere saber sus viajes';
+                $idEmpresa = trim(fgets(STDIN));
+                print_r($objViaje->listar("idEmpresa = $idEmpresa"));
+                echo 'ingrese el id del viaje que quiere ver';
+                $idViaje = trim(fgets(STDIN));
+                print_r($objPasajero->listar("idViaje = $idViaje"));
+                break;
+            }
+        } while ($opcion != 0);
 }
-
-
-//CREACION RESPONSABLE
-
-$objResponsable = new ResponsableV();
-$datosResponsable = ['documento'=>'93284672',
-                     'rnumeroEmpleado' => "3",
-                     'rnumeroLicencia' =>"1",
-                     'nombre' => 'homero',
-                     'apellido' => 'simpson',
-                     'ptelefono' =>"77"];
-
-if($bd->iniciar()){
-    $objResponsable->cargar($datosResponsable);
-    $objResponsable->insertar();
-    $objResponsable->listar();
-} else {
-    echo "Conexion fallida";
-}
-
-
-//CREACION VIAJE
-$objViaje = new Viaje();
-
-if($bd->iniciar()){
-    $objViaje->cargar($datosViaje);
-    $objViaje->insertar(); 
-    $objViaje->listar();
-} else {
-    echo "Conexion fallida";
-} 
-
-//CREACION PASAJERO
-
-$objPasajero = new Pasajero();
-$datosPasajeroD = ['nombre'=>'leonel',
-                  'apellido' => 'messi',
-                  'documento'=> '5',
-                  'ptelefono'=> "1222",
-                  'idViaje'=> "1"];
-
-if ($bd->iniciar()){
-    for ($i = 1; $i < 10; $i++) {
-        $datosPasajero = [
-            'nombre' => 'nombre' . $i,
-            'apellido' => 'apellido' . $i,
-            'documento' =>  "$i",
-            'ptelefono' => "$i",
-            'idViaje' => "1"
-        ];
-        $objPasajero->cargar($datosPasajero);
-        $objPasajero->insertar();
-    }
-    $objPasajero->listar();
-    $objPasajero->cargar($datosPasajeroD);
-    $objPasajero->listar();
-} else {
-    echo "Conexion fallida";
-}
-
-
-/*BORRADO DE DATOS*/
-echo 'ingrese 1 para eliminar todo';
-$opcion = trim(fgets(STDIN));
-
-if ($opcion == 1) {
-    
-    for ($i = 1; $i <= 10; $i++) {
-        $objPersona->cargar(['nombre'=>'leonel',
-        'apellido' => 'messi',
-        'documento'=> "$i",
-        'ptelefono'=> "1222",
-        'idViaje'=> "1"]);
-        $objPasajero->cargar($datosPasajero);
-        $objPersona->eliminar();
-    }
-    $objViaje->eliminar();
-    $objEmpresa->eliminar();
-    $objResponsable->eliminar();
-}else{
-    echo "Bueno♥";
-}
-    
