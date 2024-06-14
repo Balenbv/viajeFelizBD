@@ -145,7 +145,7 @@ public function setmensajeoperacion($mensajeoperacion)
 public function __toString()
 {
     $resp = parent::__toString();
-    $resp = "id viaje :" . $this->getIdViaje();
+    $resp .= "id viaje :" . $this->getIdViaje();
     return $resp;
 }
 

@@ -178,7 +178,7 @@ class Viaje
     {
         $resp = false;
         $base = new bdViajeFeliz();
-        $consultaModifica = "UPDATE viaje SET vdestino='" . $this->getDestino() . "', vcantmaxpasajeros=" . $this->getCantidadMaximaPasajeros() . ", rnumeroempleado=" . $this->getResponsableV() . ", vimporte=" . $this->getImporte() . " WHERE idviaje=" . $this->getIdViaje();
+        $consultaModifica = "UPDATE viaje SET vdestino='" . $this->getDestino() . "', vcantmaxpasajeros=" . $this->getCantidadMaximaPasajeros() . ", rnumeroempleado=" . $this->getResponsableV() . " WHERE idviaje=" . $this->getIdViaje();
         
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
@@ -245,7 +245,6 @@ class Viaje
         $coleccionPasajero = [];
 
         if ($base->Iniciar()) {
-
             if ($base->Ejecutar($consulta)) {
                 $pasajero = new Pasajero();
                 $coleccionPasajero = $pasajero->listar();
@@ -361,7 +360,7 @@ class Viaje
                 $booleano = true;
             } else {
                 $booleano = false;
-                setmensajeoperacion($base->getError());
+                $this->setmensajeoperacion($base->getError());
             }
         }else{
             $this->setmensajeoperacion($base->getError());
@@ -396,6 +395,7 @@ class Viaje
 
     public function mostrarResponsable(){
         //TESTEADO
+        //NO ANDUVO EN TESTVIAJE, NO LOGRA ENTRAR AL IF DEL WHILE
         $base = new bdViajeFeliz();
         $objResponsableV = null;
         
@@ -404,8 +404,11 @@ class Viaje
             if($coleccionResponsables = $responsable->listar()){
                 $i=0;
                 while($objResponsableV == null && $i<count($coleccionResponsables)){
+                    echo 'entro al while';
+                    echo $coleccionResponsables[$i]->getNumeroEmpleado() ."==". $this->getResponsableV();
                     if($coleccionResponsables[$i]->getNumeroEmpleado() == $this->getResponsableV()){
-                        $objResponsableV = $coleccionResponsables[$i];
+                        $objResponsableV = $coleccionResponsables[$i];  
+                        echo 'entro'; 
                     }
                     $i++;
                 }
@@ -438,9 +441,10 @@ class Viaje
     public function __toString()
     {
         return "
-{$this->getResponsableV()}
+
 ************
-Datos del viaje:
+Numero del encargado de este viaje: {$this->getResponsableV()} \n
+Datos del viaje: 
 codigo del destino: {$this->getIdViaje()}
 destino: {$this->getDestino()}
 cantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}
