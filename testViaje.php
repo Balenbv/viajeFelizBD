@@ -5,6 +5,8 @@ include_once 'ResponsableV.php';
 include_once 'Viaje.php';
 include_once 'Pasajero.php';
 include_once 'bdViajeFeliz.php';
+include_once 'viajePreCargado.php';
+/*** */
 
     do {
             echo "\nIngrese una opcion:\n
