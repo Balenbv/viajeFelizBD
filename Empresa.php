@@ -209,7 +209,7 @@ class Empresa{
     {
         return "Id Empresa: " . $this->getIdEmpresa() . "\n" .
                "Nombre: " . $this->getNombre() . "\n" .
-               "Direccion: " . $this->getDireccion()."\n".
-               "coleccion de viajes: " . $this->mostrarViajes() . "\n";
+               "Direccion: " . $this->getDireccion()."\n";
     }
 }
+    

@@ -20,7 +20,7 @@ if ($bd->Iniciar()){
         $opcion = trim(fgets(STDIN));
         switch($opcion){
             case 1:
-                $datosEmpresa = ['idEmpresa' => '2','enombre' => 'empresa1','edireccion' => 'Lagos del Rios'];
+                $datosEmpresa = ['idEmpresa' => '2','enombre' => 'empresa1','edireccion' => 'Lagos del Rios', 'coleccionViajes' => []];
                 $datosPasajero = [
                     ['nombre' => 'Jorge', 'apellido' => 'Messi', 'documento' => '11', 'ptelefono' => '1556', 'idViaje' => '2'],
                     ['nombre' => 'Luis', 'apellido' => 'Suarez', 'documento' => '12', 'ptelefono' => '1557', 'idViaje' => '2'],
@@ -33,14 +33,13 @@ if ($bd->Iniciar()){
                     ['nombre' => 'Golo', 'apellido' => 'Kante', 'documento' => '19', 'ptelefono' => '1564', 'idViaje' => '2'],
                     ['nombre' => 'Mohamed', 'apellido' => 'Salah', 'documento' => '20', 'ptelefono' => '1565', 'idViaje' => '2']];
                 
-                $datosResonsable = ['documento' => '93284673','rnumeroEmpleado' => '7','rnumeroLicencia' => '1','nombre' => 'Homero','apellido' => 'Simpson','ptelefono' => '77'];
-                
-                $datosViaje = ['idViaje' => '2','destino' => 'Cordoba','cantidadMaximaPasajeros' => '100','idEmpresa' => '2','numeroEmpleado' => '7','coleccionPasajeros' => $datosPasajero];
+                    $datosResonsable = ['documento' => '93284673','rnumeroEmpleado' => '7','rnumeroLicencia' => '1','nombre' => 'Homero','apellido' => 'Simpson','ptelefono' => '77'];
+                    
+                    $datosViaje = ['idViaje' => '2','destino' => 'Cordoba','cantidadMaximaPasajeros' => '100','idEmpresa' => '2','numeroEmpleado' => '7','coleccionPasajeros' => $datosPasajero];
             
                     $objEmpresa = new Empresa();
                     $objEmpresa->cargar($datosEmpresa);
                     $objEmpresa->insertar();
-            
                     $objPersona = new Persona();
             
                     $objResponsable = new ResponsableV();
@@ -56,16 +55,17 @@ if ($bd->Iniciar()){
                         $objPasajero->cargar($pasajero);
                         $objPasajero->insertar();
                     }
-                
                 break;
             case 2:
                 echo 'ingrese la empresa de la que quiere saber sus viajes';
                 $idEmpresa = trim(fgets(STDIN));
-                print_r($objViaje->listar("idEmpresa = $idEmpresa"));
+                print_r($objViaje->Buscar($idEmpresa));
                 echo 'ingrese el id del viaje que quiere ver';
                 $idViaje = trim(fgets(STDIN));
                 print_r($objPasajero->listar("idViaje = $idViaje"));
                 break;
+            case 3:
             }
+
         } while ($opcion != 0);
 }

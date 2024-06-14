@@ -440,16 +440,7 @@ class Viaje
 
     public function __toString()
     {
-        return "
-
-************
-Numero del encargado de este viaje: {$this->getResponsableV()} \n
-Datos del viaje: 
-codigo del destino: {$this->getIdViaje()}
-destino: {$this->getDestino()}
-cantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}
-************".
-print_r($this->mostrarPasajeros());
+        return "\n************Numero del encargado de este viaje: {$this->getResponsableV()} \nDatos del viaje: codigo del destino: {$this->getIdViaje()}destino: {$this->getDestino()}cantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}************";
     }
     
 }
