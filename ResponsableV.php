@@ -149,4 +149,11 @@ class ResponsableV extends Persona
         }
         return $resp;
     }
+    public function __toString()
+    {
+        $txt = parent::__toString() ."\n";
+        $txt .= "\nNumero empleado " . $this->getNumeroEmpleado().
+        $txt .= "\nNumero Licencia " . $this->getNumeroLicencia();
+        return $txt;
+    }
 }

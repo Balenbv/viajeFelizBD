@@ -70,6 +70,7 @@ class Empresa{
         $this->setIdEmpresa($datos['idEmpresa']);
         $this->setNombre($datos['enombre']);
         $this->setDireccion($datos['edireccion']);
+        $this->setColeccionViajes($datos['coleccionViajes']);
     }
 
     public function buscar($idEmpresa){
