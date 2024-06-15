@@ -112,31 +112,51 @@ do {
                 echo "*********************************\n";
                 echo "La empresa que esta cargada es:\n". $objEmpresa->listar()[0];
                 
-                menuDatos();
-                $opcionDatos = trim(fgets(STDIN));
-                echo "ingrese el id del viaje para encontrar sus datos\n";
+                echo "ingrese el ID del viaje para encontrar sus datos:\n";
                 $idViaje = trim(fgets(STDIN));
-                
-                
-                switch ($opcionDatos) {
-
-                    case 1: /*VIAJE*/
-                        do {
+                $opcionViaje = null;
                         if($objViaje->Buscar($idViaje)){
                             echo $objViaje->listar()[0];
-                        } else{
+                            menuViaje();
+                            $opcionViaje = trim(fgets(STDIN));
+                            
+                            menuDatos();
+                            $opcionDatos = trim(fgets(STDIN));
+                            switch ($opcionDatos){
+
+                            case 1: /*carga VIAJE*/
+                                    do {
+                                        if($opcionViaje = "1"){
+                                            echo "1-Agregar viaje:\n";
+                                            
+                                            echo "Ingrese el destino del viaje: ";
+                                            $destino = trim(fgets(STDIN));
+                                            echo "Ingrese la cantidad maxima de pasajeros: ";
+                                            $cantidadMaximaPasajeros = trim(fgets(STDIN));
+                                            echo "Cuantos pasajeros va a tener el viaje:";
+                                            $cantidadPasajeros = trim(fgets(STDIN));
+                                            while ($cantidadPasajeros > $cantidadMaximaPasajeros){
+                                                echo "La cantidad de pasajeros que quiere crear excede la capacidad maxima que definio\n"; 
+                                                echo "Ingrese un valor menor de creacion:";
+                                                $cantidadPasajeros = trim(fgets(STDIN));
+                                            }
+                                            echo "\n";
+                                        }else if($opcionViaje = "2"){
+                                            echo "2-Eliminar viaje:\n";
+                                        }else if($opcionViaje = "3"){
+                                            echo "3-Modificar viaje:\n";
+                                        }
+                                    } while ($opcionViaje != 4);
+                                    break;
+                            }
+                         } else{
                             echo "/////////////////////////";
                             echo "\nNo se encontro el viaje\n";
                             echo "/////////////////////////";
                         }
-                        
-                        menuViaje();
-                        $opcionViaje = trim(fgets(STDIN));
-                        } while ($opcionViaje != 4);
-                        break;
-
+                            
                     case 2: /*Cargar Pasajero*/
-
+                        
                         do {
                             $texto = "-------------------\n";
 
@@ -146,6 +166,8 @@ do {
                             }
                             echo $texto;
                             
+
+
                             menuPasajero();
                             $opcionPasajero = trim(fgets(STDIN));
                         } while ($opcionPasajero != 4);
