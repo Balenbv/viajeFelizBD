@@ -178,7 +178,7 @@ class Viaje
     {
         $resp = false;
         $base = new bdViajeFeliz();
-        $consultaModifica = "UPDATE viaje SET vdestino='" . $this->getDestino() . "', vcantmaxpasajeros=" . $this->getCantidadMaximaPasajeros() . ", rnumeroempleado=" . $this->getResponsableV() . " WHERE idviaje=" . $this->getIdViaje();
+        $consultaModifica = "UPDATE viaje SET vdestino='" . $this->getDestino() . "', vcantmaxpasajeros= " . $this->getCantidadMaximaPasajeros() . " WHERE idviaje = '" . $this->getIdViaje()."'";
         
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {

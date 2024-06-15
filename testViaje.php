@@ -35,10 +35,9 @@ function menuDatos(){
 }
 function menuViaje(){
     echo "MENU VIAJE\n";
-    echo "1-Agregar viaje:\n";
-    echo "2-Eliminar viaje:\n";
-    echo "3-Modificar viaje:\n";
-    echo "4-volver\n";
+    echo "1-Eliminar viaje:\n";
+    echo "2-Modificar viaje:\n";
+    echo "3-volver\n";
 }
 
 
@@ -132,25 +131,9 @@ do {
                         menuViaje();
                         $opcionViaje = trim(fgets(STDIN));
                         
-                        if($opcionViaje = "1"){
-                            echo "1-Agregar viaje:\n";
-
-                            echo "Ingrese el destino del viaje: ";
-                            $destino = trim(fgets(STDIN));
-                            echo "Ingrese la cantidad maxima de pasajeros: ";
-                            $cantidadMaximaPasajeros = trim(fgets(STDIN));
-                            echo "Cuantos pasajeros va a tener el viaje:";
-                            $cantidadPasajeros = trim(fgets(STDIN));
-                            while ($cantidadPasajeros > $cantidadMaximaPasajeros){
-                                echo "La cantidad de pasajeros que quiere crear excede la capacidad maxima que definio\n"; 
-                                echo "Ingrese un valor menor de creacion:";
-                                $cantidadPasajeros = trim(fgets(STDIN));
-                            }
-                            echo "\n";
-                            
-                        }else if($opcionViaje = "2"){
-                            
+                        if($opcionViaje == "1"){
                             echo "2-Eliminar viaje:\n";
+
                             echo "Para eliminar el viaje ,vamos a tener que borrar el responsable";
                             $objResponsable->eliminar();
                             if($objViaje->eliminar()){
@@ -159,19 +142,28 @@ do {
                                 echo "No se pudo eliminar\n";
                             }
                             
-                        }else if($opcionViaje = "3"){
-                            echo "3-Modificar viaje:\n";
-                            echo "Que viaje desea modificar? (ID)";
-                            $idViaje = trim(fgets(STDIN));
+                        }else if($opcionViaje == "2"){
+                            echo "2-Modificar viaje:\n";
+                            
+                            echo "Ingrese el destino del viaje nuevo: ";
+                            $destinoNuevo = trim(fgets(STDIN));
+                            echo "Ingrese la cantidad maxima de pasajeros nuevo: ";
+                            $cantidadMaximaPasajerosNueva = trim(fgets(STDIN));
+                            
+                            $datosNuevos = ['idViaje'=> $idViaje ,'destino'=>$destinoNuevo, 'cantidadMaximaPasajeros'=> $cantidadMaximaPasajerosNueva, 'idEmpresa' => null, 'numeroEmpleado' =>null, 'coleccionPasajeros' => []];
+                            
+                            $objViaje->cargar($datosNuevos);
                             $objViaje->modificar();
+                            
                         }
 
-                        } while ($opcionViaje != 4);
+                        } while ($opcionViaje !== 3);
                         break;
 
                     case 2: /*Cargar Pasajero*/
 
                         do {
+                            
                             $texto = "-------------------\n";
 
                             $coleccionPasajeros = $objViaje->mostrarPasajeros();
@@ -180,22 +172,82 @@ do {
                             }
                             echo $texto;
                             
-
-
                             menuPasajero();
                             $opcionPasajero = trim(fgets(STDIN));
+                            //A B M 
+
+                            if($opcionPasajero == "1"){
+                                $objViaje->Buscar($idViaje);
+                                echo "1 - Agregar a un pasajero \n";
+                                if ($objViaje->cantidadPasajerosActual() < $objViaje->getCantidadMaximaPasajeros()){
+                                    echo "Ingrese el nombre del pasajero: ";
+                                    $nombrePasajero = trim(fgets(STDIN));
+                                    echo "Ingrese el apellido del pasajero: ";
+                                    $apellidoPasajero = trim(fgets(STDIN));
+                                    echo "Ingrese el documento del pasajero: ";
+                                    $documentoPasajero = trim(fgets(STDIN));
+                                    echo "Ingrese el telefono del pasajero: ";
+                                    $telefonoPasajero = trim(fgets(STDIN));
+                                    $datosPasajero = ['nombre' => $nombrePasajero, 'apellido' => $apellidoPasajero, 'documento' => $documentoPasajero, 'ptelefono' => $telefonoPasajero, 'idViaje' => $idViaje];
+                                    $objViaje->crearPasajero($datosPasajero);
+                                } else {
+                                    echo "No se pueden agregar mas pasajeros\n";
+                                }
+                                
+                            }else if($opcionPasajero == "2"){
+                                echo "2- eliminar pasajero\n";
+                                echo "Ingrese el DNI del pasajero que quiere eliminar\n";
+                                $dniPasajero = trim(fgets(STDIN));
+                                $objPasajero->Buscar($dniPasajero);
+                                $objPasajero->eliminar();
+                                
+                            }else if($opcionPasajero == "3"){
+                                echo "3- modificar pasajero:\n";
+                                echo "Ingrese el DNI del pasajero que quiera modificar:";
+                                $dniPasajero = trim(fgets(STDIN));
+
+                                if($objPersona->buscar($dniPasajero)){
+                                    echo "Ingrese el nuevo nombre:";
+                                    $nuevoNombre = trim(fgets(STDIN));
+                                    echo "Ingrese el nuevo apellido:";
+                                    $nuevoApellido = trim(fgets(STDIN));
+                                    echo "Ingrese el nuevo numero de telefono:";
+                                    $nuevoNumTelefono = trim(fgets(STDIN));
+                                    $datosPersona = ['nombre' => $nuevoNombre, 'apellido' => $nuevoApellido, 'documento' => $dniPasajero, 'ptelefono' => $nuevoNumTelefono, 'idViaje' => $idViaje];
+                                    
+                                    $objPersona->cargar($datosPersona);
+                                    $objPersona->modificar();
+                                }else{
+                                    echo "No se encontro el DNI del pasajero😪\n";
+                                }
+                            }
+
                         } while ($opcionPasajero != 4);
                         break;
                         
                     case 3:/*Cargar Responsable*/
                         
                         do {
+                            menuResponsable();
+                            $opcionResponsable = trim(fgets(STDIN));      
+
                             if($objViaje->Buscar($idViaje)){
                                echo $objViaje->mostrarResponsable();
                             }
-                            $texto = "-------------------\n";
-                            $opcionPasajero = trim(fgets(STDIN));
-                        } while ($opcionResponsable != 4);
+                            echo "\n-------------------\n";
+                            $opcionResponsable = trim(fgets(STDIN));
+
+
+                            
+                            if($opcionResponsable == 1){
+                                echo "Modificar Responsable\n";
+                                echo "Queres modificar el responsable?";
+                                $objPersona->modificar();
+                            }
+                            
+                         
+
+                        } while ($opcionResponsable != 2);
                         break;
                 }
             } while ($opcionDatos != 4);
