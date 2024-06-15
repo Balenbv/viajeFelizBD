@@ -395,7 +395,7 @@ class Viaje
 
     public function mostrarResponsable(){
         //TESTEADO
-        //NO ANDUVO EN TESTVIAJE, NO LOGRA ENTRAR AL IF DEL WHILE
+        //
         $base = new bdViajeFeliz();
         $objResponsableV = null;
         
@@ -404,11 +404,8 @@ class Viaje
             if($coleccionResponsables = $responsable->listar()){
                 $i=0;
                 while($objResponsableV == null && $i<count($coleccionResponsables)){
-                    echo 'entro al while';
-                    echo $coleccionResponsables[$i]->getNumeroEmpleado() ."==". $this->getResponsableV();
                     if($coleccionResponsables[$i]->getNumeroEmpleado() == $this->getResponsableV()){
                         $objResponsableV = $coleccionResponsables[$i];  
-                        echo 'entro'; 
                     }
                     $i++;
                 }
@@ -440,7 +437,7 @@ class Viaje
 
     public function __toString()
     {
-        return "\n************Numero del encargado de este viaje: {$this->getResponsableV()} \nDatos del viaje: codigo del destino: {$this->getIdViaje()}destino: {$this->getDestino()}cantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}************";
+        return "\n************\nNumero del encargado de este viaje: {$this->getResponsableV()} \nDatos del viaje: codigo del destino: {$this->getIdViaje()}\ndestino: {$this->getDestino()}\ncantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}\n************\n";
     }
     
 }

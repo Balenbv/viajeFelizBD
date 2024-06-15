@@ -151,9 +151,10 @@ class ResponsableV extends Persona
     }
     public function __toString()
     {
-        $txt = parent::__toString() ."\n";
-        $txt .= "\nNumero empleado " . $this->getNumeroEmpleado().
-        $txt .= "\nNumero Licencia " . $this->getNumeroLicencia();
+        $txt = "-------------------\n";
+        $txt .= parent::__toString() ."\n";
+        $txt .= "Numero empleado " . $this->getNumeroEmpleado()."\n";
+        $txt .= "Numero Licencia " . $this->getNumeroLicencia()."\n";
         return $txt;
     }
 }

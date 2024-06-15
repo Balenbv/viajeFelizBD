@@ -166,6 +166,6 @@ class Persona {
 	}
 
     public function __toString() {
-        return "apellido: " . $this->getNombre() . "\napellido: " . $this->getApellido() . "\ndocumento: " . $this->getDocumento(). "\nptelefono: " . $this->getPTelefono();
+        return "Nombre: " . $this->getNombre() . "\napellido: " . $this->getApellido() . "\ndocumento: " . $this->getDocumento(). "\nptelefono: " . $this->getPTelefono();
     }
 }

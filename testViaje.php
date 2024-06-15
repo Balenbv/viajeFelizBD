@@ -61,7 +61,7 @@ do {
     $opcionPrincipal = trim(fgets(STDIN));
 
     switch ($opcionPrincipal) {
-        case 1:
+        case 1: //CARGAR EMPRESA RECARGADA
             /*DATOS PRECARGADOS*/
             if ($objEmpresa->listar()){
                 echo "ya esta creada la empresa\n";
@@ -110,7 +110,7 @@ do {
             
             do {
                 echo "*********************************\n";
-                echo "La empresa que esta cargada es:\n". $objEmpresa->listar()[0]."\n";
+                echo "La empresa que esta cargada es:\n". $objEmpresa->listar()[0];
                 
                 menuDatos();
                 $opcionDatos = trim(fgets(STDIN));
@@ -135,55 +135,109 @@ do {
                         } while ($opcionViaje != 4);
                         break;
 
-                    case 2: /*Pasajero*/
+                    case 2: /*Cargar Pasajero*/
 
                         do {
-                            if($objViaje->listar() != null){
-                                $objViaje;
-                            }else{
+                            $texto = "-------------------\n";
 
+                            $coleccionPasajeros = $objViaje->mostrarPasajeros();
+                            foreach ($coleccionPasajeros as $pasajero) {
+                                $texto .= $pasajero . "\n--------------------\n";
                             }
+                            echo $texto;
+                            
                             menuPasajero();
                             $opcionPasajero = trim(fgets(STDIN));
                         } while ($opcionPasajero != 4);
                         break;
                         
-                    case 3:/*Responsable*/
+                    case 3:/*Cargar Responsable*/
                         
                         do {
-                            menuResponsable();
-                            $opcionResponsable = trim(fgets(STDIN));
-                            
-                        } while ($opcionResponsable != 2);
+                            if($objViaje->Buscar($idViaje)){
+                               echo $objViaje->mostrarResponsable();
+                            }
+                            $texto = "-------------------\n";
+                            $opcionPasajero = trim(fgets(STDIN));
+                        } while ($opcionResponsable != 4);
                         break;
                 }
             } while ($opcionDatos != 4);
             break;
             
-        case 2:
-            $opcionDatos = 0; // Inicializar fuera del bucle para mantener el alcance
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        case 2: //crear viaje desde 0
+            if ($objEmpresa->listar()){
+                $coleccionPersonas = $objPersona->listar();
+
+                foreach ($coleccionPersonas as $persona) {
+                    $objPersona->cargar(['nombre'=>'leonel',
+                    'apellido' => 'messi',
+                    'documento'=> "{$persona->getDocumento()}",
+                    'ptelefono'=> "1222",
+                    'idViaje'=> "1"]);
+                    $objPersona->eliminar();
+                }
+                $objViaje->eliminar();
+                $objEmpresa->eliminar();
+                echo "Se eliminaron los datos precargados\n";
+            } else {
+
+            }
+
             do {
                 menuDatos();
                 $opcionDatos = trim(fgets(STDIN));
                 switch ($opcionDatos) {
-                    case 1:
+                    case 1: //DATOS VIAJES
                         do {
                             menuViaje();
                             $opcionViaje = trim(fgets(STDIN));
-                            // Aqui se manejarian las acciones para agregar, eliminar o modificar viajes
                         } while ($opcionViaje != 4);
                         break;
                     case 2:
-            
                         do {
                             menuPasajero();
                             $opcionPasajero = trim(fgets(STDIN));
+                            
+                            if($opcionPasajero = "1"){
+                                echo "Agregar pasajero:";
+                            }else if($opcionPasajero = "2"){
+                                echo 'entramos a eliminar';
+                            }else{
+                                echo 'entramos a modificar23423';
+                            }
+                            
                             // Aqui se manejarian las acciones para agregar, eliminar o modificar pasajeros
                         } while ($opcionPasajero != 4);
                         break;
                     case 3:
                         
                         do {
+
                             menuResponsable();
                             $opcionResponsable = trim(fgets(STDIN));
                             // Aqui se manejaria la accion para modificar el responsable
