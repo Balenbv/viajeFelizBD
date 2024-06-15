@@ -147,20 +147,24 @@ do {
                                 $cantidadPasajeros = trim(fgets(STDIN));
                             }
                             echo "\n";
-
                             
-
                         }else if($opcionViaje = "2"){
+                            
                             echo "2-Eliminar viaje:\n";
-
-
-
+                            echo "Para eliminar el viaje ,vamos a tener que borrar el responsable";
+                            $objResponsable->eliminar();
+                            if($objViaje->eliminar()){
+                                echo "Se elimino el viaje y el responsable correctamente !!";
+                            }else{
+                                echo "No se pudo eliminar\n";
+                            }
+                            
                         }else if($opcionViaje = "3"){
                             echo "3-Modificar viaje:\n";
-
+                            echo "Que viaje desea modificar? (ID)";
+                            $idViaje = trim(fgets(STDIN));
+                            $objViaje->modificar();
                         }
-
-
 
                         } while ($opcionViaje != 4);
                         break;
