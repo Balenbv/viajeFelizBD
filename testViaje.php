@@ -322,18 +322,16 @@ do {
             $destinoViaje = trim(fgets(STDIN));
             echo "Ingrese su ID \n";
             $idViaje = trim(fgets(STDIN));
-            echo "Ingrese su cantidad mmaxima de pasajeros \n";
+            echo "Ingrese su cantidad maxima de pasajeros \n";
             $cantidadMaximaPasajerosViaje = trim(fgets(STDIN));
             echo "Ingrese su id empresa \n";
             $idEmpresaViaje = trim(fgets(STDIN));
             
             
             echo " CARGAMOS EL PASAJERO DEL VIAJE:\n";
-            echo "Cuantos pasajeros quiere crear?";
-            $cantidadPasajeros = trim(fgets(STDIN));
             $coleccionPasajeros = [];
             
-            for ($i=0; $i < $cantidadPasajeros; $i++) {
+            for ($i=0; $i < $cantidadMaximaPasajerosViaje; $i++) {
                 echo "Ingrese su nombre\n";
                 $nombrePasajero = trim(fgets(STDIN));
                 echo "Ingrese su apellido\n";
@@ -342,7 +340,8 @@ do {
                 $numeroTelefonoPasajero = trim(fgets(STDIN));
                 echo "Ingrese su numero documento\n";
                 $documentoPasajero = trim(fgets(STDIN));
-                $datosPasajero = ['nombre'=>$nombrePasajero,'apellido'=>$apellidoPasajero,'documento'=>$numeroTelefonoPasajero,'ptelefono'=>$documentoPasajero,'idViaje'=>$idViaje];
+                
+                $datosPasajero = ['nombre'=>$nombrePasajero,'apellido'=>$apellidoPasajero,'documento'=>$documentoPasajero,'ptelefono'=>$numeroTelefonoPasajero,'idViaje'=>$idViaje];
                 array_push($coleccionPasajeros, $datosPasajero);
             }
             
@@ -359,7 +358,7 @@ do {
             $objViaje->cargar($datosViaje);
             $objViaje->insertar();
                     
-            foreach ($datosPasajero as $pasajero) {
+            foreach ($coleccionPasajeros as $pasajero) {
                 $objPasajero = new Pasajero();
                 $objPasajero->cargar($pasajero);
                 $objPasajero->insertar();
