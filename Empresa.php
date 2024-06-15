@@ -168,6 +168,22 @@ class Empresa{
         return $resp;
     }
 
+    public function eliminarEmpresas(){
+        $base = new bdViajeFeliz();
+        $resp = false;
+        if ($base->Iniciar()) {
+            $consultaBorrar = "DELETE FROM empresa WHERE 1";
+            if ($base->Ejecutar($consultaBorrar)) {
+                $resp = true;
+            } else {
+                $this->setMensajeOperacion($base->getError());
+            }
+        } else {
+            $this->setMensajeOperacion($base->getError());
+        }
+        return $resp;
+    }
+
     public function mostrarViajes(){
         $coleccionViajes = $this->getColeccionViajes();
         $mostrar = "Viajes de la empresa: \n";

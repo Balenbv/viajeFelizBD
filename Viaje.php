@@ -211,6 +211,25 @@ class Viaje
         return $resp;
     }
 
+    public function eliminarViajes()
+    {
+        $base = new bdViajeFeliz();
+        $resp = false;
+
+        if ($base->Iniciar()) {
+            $consultaBorra = "DELETE FROM viaje where 1";
+            if ($base->Ejecutar($consultaBorra)) {
+                $resp = true;
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+        return $resp;
+    }
+
+
     /*fin de los metodos de sql*/
     /*Pasajero*/   
     
