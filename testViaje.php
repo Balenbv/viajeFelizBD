@@ -385,11 +385,20 @@ do {
             echo "\033[44m----| CARGAMOS EL VIAJE |----\033[0m\n";
             echo "Ingrese su destino:";
             $destinoViaje = trim(fgets(STDIN));
+<<<<<<< HEAD
             echo "Ingrese el ID del viaje:";
             $idViaje = trim(fgets(STDIN));
             echo "Ingrese la cantidad maxima de pasajeros:";
             $cantidadMaximaPasajerosViaje = trim(fgets(STDIN));
             echo "Ingrese el ID empresa:\n";
+=======
+            echo "Ingrese el ID del viaje \n";
+            $idViaje = trim(fgets(STDIN));
+            echo "Ingrese la cantidad maxima de pasajeros \n";
+            $cantidadMaximaPasajerosViaje = trim(fgets(STDIN));
+            echo "Ingrese el ID empresa \n";
+            $idEmpresaViaje = trim(fgets(STDIN));
+>>>>>>> 3c4db527628504dc12981b7d3e0e53204b32f5ad
             
             echo "\033[44m----| CARGAMOS EL PASAJERO DEL VIAJE |----\033[0m\n";
             $coleccionPasajeros = [];
@@ -437,11 +446,19 @@ do {
             }
                     
             if ($objEmpresa->listar()){
+<<<<<<< HEAD
                 echo "\033[42mSe cargó correctamente\033[0m\n";
                         
 
             } else {
                 echo "\033[41mNo se cargó\033[0m\n";
+=======
+                echo "Se cargó correctamente\n";
+                        
+
+            } else {
+                echo "No se cargó\n";
+>>>>>>> 3c4db527628504dc12981b7d3e0e53204b32f5ad
             }
 
 
@@ -463,7 +480,11 @@ do {
                             echo $objViaje->listar()[0];
                         } else{
                             echo "\n";
+<<<<<<< HEAD
                             echo "\033[/////////////////////////////// \033[0m";
+=======
+                            echo "////////////////////////////////";
+>>>>>>> 3c4db527628504dc12981b7d3e0e53204b32f5ad
                             echo "\nNo se encontro el viaje\n";
                             echo "\033[//////////////////////////////// \033[0m";
 
@@ -475,6 +496,7 @@ do {
                         if($opcionViaje == "1"){
                             echo "2) Eliminar el viaje:\n";
 
+<<<<<<< HEAD
                             echo "Para eliminar el viaje ,vamos a tener que borrar el responsable y los pasajeros";
 
                             $objPersona->buscar($numeroDocumentoResponsable);
@@ -488,6 +510,11 @@ do {
                                 $objPasajero->eliminar();
                             }
 
+=======
+                             if($objPersona->buscar($numeroDocumentoResponsable)){
+                                $objPersona->eliminar();
+                            }
+>>>>>>> 3c4db527628504dc12981b7d3e0e53204b32f5ad
                             
                             if($objViaje->eliminar()){
                                 echo "\nSe elimino el viaje y el responsable correctamente !!";
