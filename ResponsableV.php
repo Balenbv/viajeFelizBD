@@ -118,7 +118,7 @@ class ResponsableV extends Persona
         $resp = false;
         $base = new bdViajeFeliz();
         if (parent::modificar()){
-            $consultaModifica = "UPDATE Responsable SET rnumerolicencia=".$this->getNumeroLicencia()." WHERE rdocumento= ".parent::getDocumento();
+            $consultaModifica = "UPDATE Responsable SET rnumerolicencia=".$this->getNumeroLicencia()." WHERE rdocumento= '".parent::getDocumento()."'";
             if ($base->Iniciar()){
                 if ($base->Ejecutar($consultaModifica)){
                     $resp =  true;

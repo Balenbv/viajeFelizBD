@@ -135,7 +135,7 @@ class Persona {
 	{
 		$resp = false;
 		$base = new bdViajeFeliz();
-		$consultaModifica = "UPDATE persona SET apellido='" . $this->getApellido() . "',nombre='" . $this->getNombre() . "' , ptelefono=" . $this->getPTelefono() . " WHERE documento= " . $this->getDocumento();
+		$consultaModifica = "UPDATE persona SET apellido='" . $this->getApellido() . "',nombre='" . $this->getNombre() . "' , ptelefono=" . $this->getPTelefono() . " WHERE documento= '" . $this->getDocumento()."'";
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaModifica)) {
 				$resp =  true;
