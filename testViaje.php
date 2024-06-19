@@ -442,6 +442,13 @@ do {
 
             } else {
                 echo "\033[41mNo se cargó\033[0m\n";
+            }
+
+
+
+            do {
+                echo "*********************************\n";
+                echo "La empresa que esta cargada es:\n". $objEmpresa->listar()[0];
                 
                 echo "Ingrese el ID del viaje para encontrar sus datos:";
                 $idViaje = trim(fgets(STDIN));
