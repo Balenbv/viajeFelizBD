@@ -19,9 +19,11 @@ function menuPrincipal(){
     echo "
     |*************************************************************************|                                                                         
     |                        MENU PRINCIPAL                                   |
-    |                        1 ) Cargar empresa precargada.                   |
-    |                        2 ) Crear una empresa desde 0.                   |
-    |                        3 ) Cerrar programa.                             |
+    |                        1) Cargar empresa precargada.                    |
+    |                        2) Crear una empresa desde 0.                    |
+    |                        3) Agregar Viaje (A B M)                         |
+    |                          (necesita una empresa cargarda)                |
+    |                        4) Cerrar programa.                              |
     |                                                                         |
     |*************************************************************************|
     \n";
@@ -29,10 +31,10 @@ function menuPrincipal(){
 function menuDatos(){
     echo "
     |*************************************************************************|                                                                         
-    |                        MENU DATOS                                       |
-    |                        1 ) Datos del viaje:                             |
-    |                        2 ) Datos del pasajero:                          |
-    |                        3 ) Datos del responsable:                       |
+    |                                                                         |
+    |                        1 ) MENU del viaje:                              |
+    |                        2 ) MENU del pasajero:                           |
+    |                        3 ) MENU del responsable:                        |
     |                        4 ) Volver:                                      | 
     |                                                                         |
     |*************************************************************************|
@@ -42,10 +44,11 @@ function menuDatos(){
 function menuViaje(){
     echo "
     |*************************************************************************|                                                                         
-    |                        MENU VIAJE                                       |
-    |                        1 ) Eliminar el viaje:                           |
-    |                        2 ) Modificar el viaje:                          |
-    |                        3 ) Volver:                                      |
+    |                   Modificar | Agregar | eliminar el viaje               |
+    |                   1 ) Agregar el viaje:                                 | 
+    |                   2 ) Eliminar el viaje:                                |
+    |                   3 ) Modificar el viaje:                               |
+    |                   4 ) Volver:                                           |
     |                                                                         |
     |*************************************************************************|
     \n";
@@ -85,20 +88,20 @@ do {
             /*DATOS PRECARGADOS*/
             if ($objEmpresa->listar()){
                 $datosPasajero = [
-                    ['nombre' => 'Jorge', 'apellido' => 'Messi', 'documento' => '11', 'ptelefono' => '1556', 'idViaje' => '2'],
-                    ['nombre' => 'Luis', 'apellido' => 'Suarez', 'documento' => '12', 'ptelefono' => '1557', 'idViaje' => '2'],
-                    ['nombre' => 'Neymar', 'apellido' => 'Jr', 'documento' => '13', 'ptelefono' => '1558', 'idViaje' => '2'],
-                    ['nombre' => 'Kylian', 'apellido' => 'Mbappe', 'documento' => '14', 'ptelefono' => '1559', 'idViaje' => '2'],
-                    ['nombre' => 'Lionel', 'apellido' => 'Messi', 'documento' => '15', 'ptelefono' => '1560', 'idViaje' => '2'],
-                    ['nombre' => 'Cristiano', 'apellido' => 'Ronaldo', 'documento' => '16', 'ptelefono' => '1561', 'idViaje' => '2'],
-                    ['nombre' => 'Robert', 'apellido' => 'Lewandowski', 'documento' => '17', 'ptelefono' => '1562', 'idViaje' => '2'],
-                    ['nombre' => 'Kevin', 'apellido' => 'De Bruyne', 'documento' => '18', 'ptelefono' => '1563', 'idViaje' => '2'],
-                    ['nombre' => 'Golo', 'apellido' => 'Kante', 'documento' => '19', 'ptelefono' => '1564', 'idViaje' => '2'],
-                    ['nombre' => 'Mohamed', 'apellido' => 'Salah', 'documento' => '20', 'ptelefono' => '1565', 'idViaje' => '2']];
+                    ['nombre' => 'Jorge', 'apellido' => 'Messi', 'documento' => 11, 'ptelefono' => '1556', 'idViaje' => 1],
+                    ['nombre' => 'Luis', 'apellido' => 'Suarez', 'documento' => 12, 'ptelefono' => '1557', 'idViaje' => 1],
+                    ['nombre' => 'Neymar', 'apellido' => 'Jr', 'documento' => 13, 'ptelefono' => '1558', 'idViaje' => 1],
+                    ['nombre' => 'Kylian', 'apellido' => 'Mbappe', 'documento' => 14, 'ptelefono' => '1559', 'idViaje' => 1 ],
+                    ['nombre' => 'Lionel', 'apellido' => 'Messi', 'documento' => 15, 'ptelefono' => '1560', 'idViaje' => 1],
+                    ['nombre' => 'Cristiano', 'apellido' => 'Ronaldo', 'documento' => 16, 'ptelefono' => '1561', 'idViaje' => 1],
+                    ['nombre' => 'Robert', 'apellido' => 'Lewandowski', 'documento' => 17, 'ptelefono' => '1562', 'idViaje' => 1],
+                    ['nombre' => 'Kevin', 'apellido' => 'De Bruyne', 'documento' => 18, 'ptelefono' => '1563', 'idViaje' => 1],
+                    ['nombre' => 'Golo', 'apellido' => 'Kante', 'documento' => 19, 'ptelefono' => '1564', 'idViaje' => 1],
+                    ['nombre' => 'Mohamed', 'apellido' => 'Salah', 'documento' => 20, 'ptelefono' => '1565', 'idViaje' => 1]];
                 
-                    $datosResponsable = ['documento' => '93284673','rnumeroEmpleado' => '7','rnumeroLicencia' => '1','nombre' => 'Homero','apellido' => 'Simpson','ptelefono' => '77'];
+                    $datosResponsable = ['documento' => 93284673,'rnumeroEmpleado' => null,'rnumeroLicencia' => '1','nombre' => 'Homero','apellido' => 'Simpson','ptelefono' => '77'];
                     
-                    $datosViaje = ['idViaje' => '2','destino' => 'Cordoba','cantidadMaximaPasajeros' => '100','idEmpresa' => '80','numeroEmpleado' => '7','coleccionPasajeros' => $datosPasajero];
+                    $datosViaje = ['idViaje' => null,'destino' => 'Cordoba','cantidadMaximaPasajeros' => '100','idEmpresa' => 80,'numeroEmpleado' => null,'coleccionPasajeros' => $datosPasajero];
                   
                     $objResponsable->cargar($datosResponsable);
                     $objResponsable->insertar();
@@ -107,43 +110,43 @@ do {
                     $objViaje->insertar();
                     
                     foreach ($datosPasajero as $pasajero) {
-                        $objPasajero = new Pasajero();
                         $objPasajero->cargar($pasajero);
                         $objPasajero->insertar();
                     }
                     
                     if ($objEmpresa->listar()){
-                        echo "Se cargó correctamente😎\n";
-                        
-
+                        echo "Se cargó correctamente\n";
                     } else {
-                        echo "No se cargó😞\n";
+                        echo "No se cargó\n";
                     }
             } else {
-                $datosEmpresa = ['idEmpresa' => '2','enombre' => 'empresa1','edireccion' => 'Lagos del Rios', 'coleccionViajes' => []];
+                $datosEmpresa = ['idEmpresa' => null,'enombre' => 'empresa1','edireccion' => 'Lagos del Rios', 'coleccionViajes' => []];
                 $datosPasajero = [
-                    ['nombre' => 'Jorge', 'apellido' => 'Messi', 'documento' => '11', 'ptelefono' => '1556', 'idViaje' => '2'],
-                    ['nombre' => 'Luis', 'apellido' => 'Suarez', 'documento' => '12', 'ptelefono' => '1557', 'idViaje' => '2'],
-                    ['nombre' => 'Neymar', 'apellido' => 'Jr', 'documento' => '13', 'ptelefono' => '1558', 'idViaje' => '2'],
-                    ['nombre' => 'Kylian', 'apellido' => 'Mbappe', 'documento' => '14', 'ptelefono' => '1559', 'idViaje' => '2'],
-                    ['nombre' => 'Lionel', 'apellido' => 'Messi', 'documento' => '15', 'ptelefono' => '1560', 'idViaje' => '2'],
-                    ['nombre' => 'Cristiano', 'apellido' => 'Ronaldo', 'documento' => '16', 'ptelefono' => '1561', 'idViaje' => '2'],
-                    ['nombre' => 'Robert', 'apellido' => 'Lewandowski', 'documento' => '17', 'ptelefono' => '1562', 'idViaje' => '2'],
-                    ['nombre' => 'Kevin', 'apellido' => 'De Bruyne', 'documento' => '18', 'ptelefono' => '1563', 'idViaje' => '2'],
-                    ['nombre' => 'Golo', 'apellido' => 'Kante', 'documento' => '19', 'ptelefono' => '1564', 'idViaje' => '2'],
-                    ['nombre' => 'Mohamed', 'apellido' => 'Salah', 'documento' => '20', 'ptelefono' => '1565', 'idViaje' => '2']];
+                    ['nombre' => 'Jorge', 'apellido' => 'Messi', 'documento' => '11', 'ptelefono' => '1556', 'idViaje' => 1],
+                    ['nombre' => 'Luis', 'apellido' => 'Suarez', 'documento' => '12', 'ptelefono' => '1557', 'idViaje' => 1],
+                    ['nombre' => 'Neymar', 'apellido' => 'Jr', 'documento' => '13', 'ptelefono' => '1558', 'idViaje' => 1],
+                    ['nombre' => 'Kylian', 'apellido' => 'Mbappe', 'documento' => '14', 'ptelefono' => '1559', 'idViaje' => 1],
+                    ['nombre' => 'Lionel', 'apellido' => 'Messi', 'documento' => '15', 'ptelefono' => '1560', 'idViaje' => 1],
+                    ['nombre' => 'Cristiano', 'apellido' => 'Ronaldo', 'documento' => '16', 'ptelefono' => '1561', 'idViaje' => 1],
+                    ['nombre' => 'Robert', 'apellido' => 'Lewandowski', 'documento' => '17', 'ptelefono' => '1562', 'idViaje' => 1],
+                    ['nombre' => 'Kevin', 'apellido' => 'De Bruyne', 'documento' => '18', 'ptelefono' => '1563', 'idViaje' => 1],
+                    ['nombre' => 'Golo', 'apellido' => 'Kante', 'documento' => '19', 'ptelefono' => '1564', 'idViaje' => 1],
+                    ['nombre' => 'Mohamed', 'apellido' => 'Salah', 'documento' => '20', 'ptelefono' => '1565', 'idViaje' => 1]];
                 
-                    $datosResponsable = ['documento' => '93284673','rnumeroEmpleado' => '7','rnumeroLicencia' => '1','nombre' => 'Homero','apellido' => 'Simpson','ptelefono' => '77'];
+                    $datosResponsable = ['documento' => '93284673','rnumeroEmpleado' => null,'rnumeroLicencia' => '1','nombre' => 'Homero','apellido' => 'Simpson','ptelefono' => '77'];
                     
-                    $datosViaje = ['idViaje' => '2','destino' => 'Cordoba','cantidadMaximaPasajeros' => '100','idEmpresa' => '2','numeroEmpleado' => '7','coleccionPasajeros' => $datosPasajero];
+                    $datosViaje = ['idViaje' => null,'destino' => 'Cordoba','cantidadMaximaPasajeros' => 100,'idEmpresa' => 1,'numeroEmpleado' => 1,'coleccionPasajeros' => $datosPasajero];
                     
                     $objEmpresa->cargar($datosEmpresa);
                     $objEmpresa->insertar();
-            
+                    
                     $objResponsable->cargar($datosResponsable);
                     $objResponsable->insertar();
-            
+
+                    
+                    echo 'AAAAAAAAAAAAAAAAAAAAAAAAAAA';
                     $objViaje->cargar($datosViaje);
+                    echo 'BBBBBBBBBBBBBBBBBBBBBBBBBBB';
                     $objViaje->insertar();
                     
                     foreach ($datosPasajero as $pasajero) {
@@ -153,6 +156,7 @@ do {
                     }
                     
                     if ($objEmpresa->listar()){
+                        
                         echo "Se cargó correctamente😎\n";
                         
 
@@ -329,8 +333,6 @@ do {
                 }
             } while ($opcionDatos != 4);
             break;
-            
-///// 
 
         case 2: //crear viaje desde 0 
             
@@ -430,8 +432,7 @@ do {
             $objViaje->cargar($datosViaje);
             $objViaje->insertar();
                     
-            foreach ($coleccionPasajeros as $pasajero) {
-                $objPasajero = new Pasajero();
+            foreach ($coleccionPasajeros as $pasajero){
                 $objPasajero->cargar($pasajero);
                 $objPasajero->insertar();
             }
@@ -483,7 +484,6 @@ do {
                             $coleccionPasajeros = $objPasajero->listar(" idviaje = '". $idViaje."'") ;
 
                             foreach ($coleccionPasajeros as $pasajeroUnico) {
-                                $objPasajero = new Pasajero();
                                 $objPasajero->Buscar($pasajeroUnico->getDocumento());
                                 $objPasajero->eliminar();
                             }
@@ -607,7 +607,7 @@ do {
                                     $objResponsable->cargar($datosPersona);
                                     $objResponsable->modificar();
                                 }else{
-                                    echo "No se encontro el DNI del pasajero😪😢\n";
+                                    echo "No se encontro el DNI del pasajero\n";
                                 }
                                 echo "\n";  
                             }
@@ -616,9 +616,32 @@ do {
                 }
             } while ($opcionDatos != 4);
             break;
-        case 3:
+
+        case 3:  /** VIAJE: agregar/ modificar/ eliminar */
+            echo "Ingrese el id del viaje que desea modificar\n";
+            $idViaje = trim(fgets(STDIN));
+            if ($objViaje->Buscar($idViaje)){
+                menuViajes();
+               $opcion = trim(fgets(STDIN));
+                if($opcion == 1){
+
+                }elseif($opcion == 2){
+
+                }elseif($opcion == 3){
+                    
+                }
+                    
+
+            }else {
+                echo "El viaje con el id ".$idViaje. " no existe.\n";
+            }
+
+
+
+        case 4:
             echo "Gracias por usar nuestro servicio.\n";
             break;
+            
     }
 } while ($opcionPrincipal != 3);
 

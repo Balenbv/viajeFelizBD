@@ -2,12 +2,12 @@
 
 class Viaje
 {
-    private $idViaje;                                       //idviaje bigint AUTO_INCREMENT,
+    private $idViaje;                                       //idviaje varchar AUTO_INCREMENT,
     private $destino;                                       //vdestino varchar(150),
     private $cantidadMaximaPasajeros;                       //vcantmaxpasajeros int,
-    private $idEmpresa;                                     //idempresa bigint,
-    private $objResponsableV;                               //rnumeroempleado bigint,                                      //vimporte float,
-    private $ColeccionObjsPasajeros;
+    private $idEmpresa;                                     //idempresa varchar,
+    private $objResponsableV;                               //rnumeroempleado varchar,                                      
+    private $ColeccionObjsPasajeros;                        
     private $mensajeoperacion;                    
 
     public function __construct()
@@ -15,7 +15,7 @@ class Viaje
         $this->objResponsableV ='' ;
         $this->idViaje = '';
         $this->destino = '';
-        $this->cantidadMaximaPasajeros ='' ;
+        $this->cantidadMaximaPasajeros ='';
         $this->ColeccionObjsPasajeros = [];
     }
 
@@ -24,7 +24,7 @@ class Viaje
         $this->setIdViaje($datos['idViaje']);
         $this->setDestino($datos['destino']);
         $this->setCantidadMaximaPasajeros($datos['cantidadMaximaPasajeros']);
-        $this->setIdEmpresa($datos['idEmpresa']); 
+        $this->setIdEmpresa($datos['idEmpresa']);
         $this->setResponsableV($datos['numeroEmpleado']);
         $this->setColeccionPasajero($datos['coleccionPasajeros']);
     }
@@ -110,7 +110,7 @@ class Viaje
         $resp = false;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaViaje)) {
-                if ($row2 = $base->Registro()) {
+                if ($row2 = $base->Registro()){
                     $this->setIdViaje($idViaje);
                     $this->setDestino($row2['vdestino']);
                     $this->setCantidadMaximaPasajeros($row2['vcantmaxpasajeros']);
@@ -158,8 +158,7 @@ class Viaje
         $base = new bdViajeFeliz();
         $resp = false;
         $consultaInsertar = "INSERT INTO viaje(idviaje,vdestino, vcantmaxpasajeros,idempresa,rnumeroempleado) VALUES 
-        ('" . $this->getIdViaje() . "','" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "','" . $this->getIdEmpresa() . "','" . $this->getResponsableV(). "')";
-        //consulta de delegacion con getResponsableV
+        (" . $this->getIdViaje() . ",'" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "'," . $this->getIdEmpresa() . "," . $this->getResponsableV(). ")";
         
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
@@ -170,7 +169,6 @@ class Viaje
         } else {
             $this->setmensajeoperacion($base->getError());
         }
-
         return $resp;
     }
 
@@ -234,7 +232,6 @@ class Viaje
     /*Pasajero*/   
     
     public function hayPasajesDisponibles(){
-        //TESTEADO
         $base = new bdViajeFeliz();
         $consulta = "SELECT count(*) as cantidadPasajes FROM pasajero WHERE idviaje = '" . $this->getIdViaje()."'";
         $resp = false;
@@ -257,7 +254,6 @@ class Viaje
     }
 
     public function mostrarPasajeros(){
-        //TESTEADO 
         $base = new bdViajeFeliz();
         $consulta = "SELECT * FROM pasajero WHERE idviaje = '" . $this->getIdViaje()."'";
         $resp = false;
@@ -277,7 +273,6 @@ class Viaje
     }
 
     public function existePersona($dni){
-        //TESTEADO
         $base = new bdViajeFeliz();
         $consulta = "SELECT * FROM persona WHERE documento = " . $dni;
         $resp = false;
@@ -300,7 +295,6 @@ class Viaje
         
 
     public function crearPasajero($datos){
-        //TESTEADO
         $base = new bdViajeFeliz();
         $booleano = true;
         $pasajero = new Pasajero();
@@ -326,7 +320,6 @@ class Viaje
     }
 
     public function modificarPasajero($datos){
-        //TESTEADO
         $base = new bdViajeFeliz();
         $bandera = false;
 
@@ -349,7 +342,6 @@ class Viaje
     }
 
     public function eliminarPasajero($datos){
-        //TESTEADO
         $base = new bdViajeFeliz();
         $resp = false;
         $pasajero = new Pasajero();
@@ -413,8 +405,7 @@ class Viaje
     }
 
     public function mostrarResponsable(){
-        //TESTEADO
-        //
+        
         $base = new bdViajeFeliz();
         $objResponsableV = null;
         
@@ -439,7 +430,6 @@ class Viaje
     }
         
     public function eliminarResponsable($datos){
-       // CASI TESTEADO
         $base = new bdViajeFeliz();
         $resp = false;
         $responsable = new responsableV();

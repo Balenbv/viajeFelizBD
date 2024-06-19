@@ -156,7 +156,7 @@ class Empresa{
         $base = new bdViajeFeliz();
         $resp = false;
         if ($base->Iniciar()) {
-            $consultaBorrar = "DELETE FROM empresa WHERE idempresa = " . $this->getIdEmpresa();
+            $consultaBorrar = "DELETE FROM empresa WHERE idempresa = '" . $this->getIdEmpresa()."'";
             if ($base->Ejecutar($consultaBorrar)) {
                 $resp = true;
             } else {

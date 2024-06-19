@@ -69,6 +69,3 @@ if ($bd->Iniciar()){
 
         } while ($opcion != 0);
 }
-
-
-

@@ -7,10 +7,10 @@ class Pasajero extends Persona
 
    public function __construct()
    {
-    parent::__construct();  //nombre varchar(150), apellido varchar(150), documento bigint, ptelefono bigint
+    parent::__construct();  //nombre varchar(150), apellido varchar(150), documento varchar, ptelefono varchar
     $this->idViaje = '';
    }
-   
+
     public function cargar($datos) {
         parent::cargar($datos);
         $this->setIdViaje($datos['idViaje']);

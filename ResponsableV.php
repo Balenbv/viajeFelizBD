@@ -2,12 +2,12 @@
 
 class ResponsableV extends Persona
 {
-    private $numeroEmpleado;         //rnumeroempleado bigint AUTO_INCREMENT,
-    private $numeroLiciencia;        //rnumerolicencia bigint,
+    private $numeroEmpleado;         //rnumeroempleado varchar,
+    private $numeroLiciencia;        //rnumerolicencia varchar,
 
     public function __construct()
     {
-        parent::__construct();          //nombre varchar(150), apellido varchar(150), documento bigint, ptelefono bigint
+        parent::__construct();          //nombre varchar(150), apellido varchar(150), documento varchar, ptelefono varchar
         $this->numeroEmpleado = '';
         $this->numeroLiciencia = '';
     }
@@ -74,10 +74,13 @@ class ResponsableV extends Persona
         $arreglo = null;
         $base = new bdViajeFeliz();
         $consulta = "SELECT * FROM responsable ";
+
         if ($condicion!=""){
             $consulta=$consulta.' WHERE '.$condicion;
         }
+
         $consulta.=" order by rdocumento ";
+
         if($base->iniciar()){
             if($base->ejecutar($consulta)){
                 $arreglo= array();
@@ -98,6 +101,7 @@ class ResponsableV extends Persona
     public function insertar(){
         $base=new bdViajeFeliz();
         $resp= false;
+
         if(parent::insertar()){
             $consultaInsertar = "INSERT INTO responsable(rdocumento, rnumeroempleado, rnumerolicencia) 
             VALUES (".parent::getDocumento().",".$this->getNumeroEmpleado().",".$this->getNumeroLicencia().")";
@@ -111,6 +115,7 @@ class ResponsableV extends Persona
                 $this->setmensajeoperacion($base->getError());
             }
         }
+        
         return $resp;
     }
 
