@@ -664,8 +664,8 @@ do {
                 foreach($empresas as $empresa){
                     $txt .= $empresa . "\n";
                 }
-
                 echo $txt;
+
                 echo "\nIngrese el ID de la empresa que va a pertenecer el Viaje";
                 $idEmpresa = trim(fgets(STDIN));
                 
@@ -696,7 +696,7 @@ do {
                    
                 } else {
                     echo "El empleado es\n";
-                    echo $objResponsable->listar("rdocumento =".$numDocumento)[0] ."\n";
+                    echo $objResponsable->listar("rdocumento =". $numDocumento)[0] ."\n";
                     $numeroEmpleadoResponsable = $objResponsable->listar("rdocumento =". $numDocumento)[0]->getNumeroEmpleado();
                     // si existe queda ese empleado con ese ID
                 }
