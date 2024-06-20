@@ -205,7 +205,7 @@ do {
                                     $cantidadMaximaPasajerosNueva = trim(fgets(STDIN));
                                     echo "Ingrese el ID empresa nuevo:\n";
                                     $idEmpresaNuevo = trim(fgets(STDIN));
-                                    if ($idEmpresaNuevo < 1 || $objEmpresa->buscar($idEmpresaNuevo) == false){
+                                    if ($idEmpresaNuevo < 1 || $objEmpresa->buscar($idEmpresaNuevo) == false || $cantidadMaximaPasajerosNueva < 0 || !is_numeric($cantidadMaximaPasajerosNueva)){
                                         echo "No se encontro la empresa y/o hay datos invalidos en la capacidad de pasajeros 🙁\n";
                                     }
                                 } while ($idEmpresaNuevo < 1 || $objEmpresa->buscar($idEmpresaNuevo) == false);
@@ -367,19 +367,20 @@ do {
             }
             echo "\033[44m----| LA BASE DE DATOS ESTÁ EN VACÍA |----\033[0m\n";
             
-            
-            
             echo "CREAMOS LA BASE DE DATOS\n";
+            do{
             echo "Ingrese el nombre de la empresa:";
             $nombreEmpresa = trim(fgets(STDIN));
             echo "Ingrese el ID de la empresa:";
             $idEmpresa = trim(fgets(STDIN));
             echo "Ingrese la direccion de la empresa:";
             $direccionEmpresa = trim(fgets(STDIN));
+            }while($idEmpresa < 0 || $nombreEmpresa == "" || $direccionEmpresa == "" || !is_numeric($idEmpresa) || is_numeric($nombreEmpresa));
+
+
+
 
             echo "\033[44m----| CARGAMOS EL RESPONSABLE DEL VIAJE: |----\033[0m\n";
-
-
             echo "Ingrese su nombre:";
             $nombreResponsable = trim(fgets(STDIN));
             echo "Ingrese su apellido:";
