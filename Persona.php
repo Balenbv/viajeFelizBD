@@ -61,7 +61,7 @@ class Persona {
     public function setMensajeOperacion($mensajeoperacion){
         $this->mensajeoperacion = $mensajeoperacion;
     }
-    
+
 	public function Buscar($documento)
 	{
 		$base = new bdViajeFeliz();
@@ -100,7 +100,13 @@ class Persona {
 				$arregloPersona = array();
 				while ($row2 = $base->Registro()) {
 					$perso = new Persona();
-					$perso->Buscar($row2['documento']);
+					$datos = [
+						'documento' => $row2['documento'],
+						'nombre' => $row2['nombre'],
+						'apellido' => $row2['apellido'],
+						'ptelefono' => $row2['ptelefono']
+					];
+					$perso->cargar($datos);
 					array_push($arregloPersona, $perso);
 				}
 			} else {

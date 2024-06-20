@@ -68,7 +68,7 @@ public function setmensajeoperacion($mensajeoperacion)
             if ($base->Ejecutar($consulta)) {
                 $arregloPasajero = array();
                 while ($row2 = $base->Registro()) {
-                    $obj = new pasajero();
+                    $obj = new Pasajero();
                     $obj->Buscar($row2['pdocumento']);
                     array_push($arregloPasajero, $obj);
                 }

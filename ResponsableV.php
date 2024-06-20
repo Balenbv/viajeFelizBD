@@ -89,7 +89,7 @@ class ResponsableV extends Persona
                     $responsable->Buscar($row2['rdocumento']);
                     array_push($arreglo,$responsable);
                 }
-            }	else {
+            }	else{
                 $this->setmensajeoperacion($base->getError());
             }
         }	else {
@@ -161,7 +161,7 @@ class ResponsableV extends Persona
         $txt = "-------------------\n";
         $txt .= parent::__toString() ."\n";
         $txt .= "Numero empleado " . $this->getNumeroEmpleado()."\n";
-        $txt .= "Numero Licencia " . $this->getNumeroLicencia()."\n";
+        $txt .= "Numero Licencia " . $this->getNumeroLicencia();
         return $txt;
     }
 }

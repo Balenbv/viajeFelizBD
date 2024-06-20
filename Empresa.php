@@ -80,6 +80,7 @@ class Empresa{
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
                 if ($row2 = $base->Registro()) {
+                    echo 'se encontro la empresa';
                     $this->setIdEmpresa($idEmpresa);
                     $this->setNombre($row2['enombre']);
                     $this->setDireccion($row2['edireccion']);
@@ -108,7 +109,9 @@ class Empresa{
                 $arregloEmpresas = array();
                 while ($row2 = $base->Registro()) {
                     $obj = new Empresa();
-                    $obj->Buscar($row2['idempresa']);
+                    $array = ['idEmpresa' => $row2['idempresa'], 'enombre' => $row2['enombre'], 'edireccion' => $row2['edireccion'], 'coleccionViajes' => $this->getColeccionViajes()];
+                    //idempresa enombre edireccion
+                    $obj->cargar($array);
                     array_push($arregloEmpresas, $obj);
                 }
             } else {
@@ -185,6 +188,7 @@ class Empresa{
     }
 
     public function mostrarViajes(){
+        print_r($this->getColeccionViajes());
         $coleccionViajes = $this->getColeccionViajes();
         $mostrar = "Viajes de la empresa: \n";
         $i=1;

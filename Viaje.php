@@ -28,7 +28,7 @@ class Viaje
         $this->setResponsableV($datos['numeroEmpleado']);
         $this->setColeccionPasajero($datos['coleccionPasajeros']);
     }
-    
+
     public function getIdViaje()
     {
         return $this->idViaje;
@@ -138,11 +138,22 @@ class Viaje
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
                 $arreglo = array();
+
                 while ($row2 = $base->Registro()) {
                     $obj = new Viaje();
-                    $obj->Buscar($row2['idviaje']);
+                    
+                    $datos = ['idViaje' => $row2['idviaje'],
+                    'destino' => $row2['vdestino'],
+                    'cantidadMaximaPasajeros' => $row2['vcantmaxpasajeros'],
+                    'idEmpresa' => $row2['idempresa'],
+                    'numeroEmpleado' => $row2['rnumeroempleado'],
+                    'coleccionPasajeros' => $this->getColeccionObjsPasajeros()
+                    ];
+
+                    $obj->cargar($datos);
                     array_push($arreglo, $obj);
                 }
+                
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
@@ -176,7 +187,8 @@ class Viaje
     {
         $resp = false;
         $base = new bdViajeFeliz();
-        $consultaModifica = "UPDATE viaje SET vdestino='" . $this->getDestino() . "', vcantmaxpasajeros= " . $this->getCantidadMaximaPasajeros() . " WHERE idviaje = '" . $this->getIdViaje()."'";
+        $consultaModifica = "UPDATE viaje SET vdestino ='{$this->getDestino()}', vcantmaxpasajeros = {$this->getCantidadMaximaPasajeros()}, idempresa = {$this->getIdEmpresa()} WHERE idviaje = {$this->getIdViaje()}";
+        //UPDATE viaje SET vdestino = 'londres', vcantmaxpasajeros = 80, idempresa = 1 where idviaje = 1
         
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
@@ -253,25 +265,6 @@ class Viaje
         return $resp;
     }
 
-    public function mostrarPasajeros(){
-        $base = new bdViajeFeliz();
-        $consulta = "SELECT * FROM pasajero WHERE idviaje = '" . $this->getIdViaje()."'";
-        $resp = false;
-        $coleccionPasajero = [];
-
-        if ($base->Iniciar()) {
-            if ($base->Ejecutar($consulta)) {
-                $pasajero = new Pasajero();
-                $coleccionPasajero = $pasajero->listar();
-            } else {
-                $this->setmensajeoperacion($base->getError());
-            }
-        } else {
-            $this->setmensajeoperacion($base->getError());
-        }
-        return $coleccionPasajero;
-    }
-
     public function existePersona($dni){
         $base = new bdViajeFeliz();
         $consulta = "SELECT * FROM persona WHERE documento = " . $dni;
@@ -292,8 +285,6 @@ class Viaje
         
     }
         
-        
-
     public function crearPasajero($datos){
         $base = new bdViajeFeliz();
         $booleano = true;
@@ -446,7 +437,7 @@ class Viaje
 
     public function __toString()
     {
-        return "\n************\nNumero del encargado de este viaje: {$this->getResponsableV()} \nDatos del viaje:\n\ncodigo del destino: {$this->getIdViaje()}\ndestino: {$this->getDestino()}\ncantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}\n************\n";
+        return "\n************\nNumero del encargado de este viaje: {$this->getResponsableV()}\nDatos del viaje:\ncodigo del viaje: {$this->getIdViaje()}\ndestino: {$this->getDestino()}\ncantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}\n************\n";
     }
     
 }
