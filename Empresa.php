@@ -80,7 +80,7 @@ class Empresa{
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
                 if ($row2 = $base->Registro()) {
-                    echo 'se encontro la empresa';
+                    //echo 'se encontro la empresa';
                     $this->setIdEmpresa($idEmpresa);
                     $this->setNombre($row2['enombre']);
                     $this->setDireccion($row2['edireccion']);
