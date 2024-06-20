@@ -179,13 +179,13 @@ do {
                                 //////////////////////////////////////////////////////////////////
                                 //ACA HAY QUE PONER EL AGREGAR VIAJE//
                                 //////////////////////////////////////////////////////////////////
-                                ;break;
+                                break;
                             case 2:
                                     echo "2) Eliminar viaje:\n";
                                 echo "Para eliminar el viaje ,vamos a tener que borrar el responsable y los pasajeros\n";
 
-                                $objPersona->buscar(93284673);
-                                $objPersona->eliminar();
+                                $objResponsable->buscar(93284673);
+                                $objResponsable->eliminar();
 
                                 foreach ($datosPasajero as $pasajero) {
                                     $objPasajero = new Pasajero();
@@ -193,7 +193,9 @@ do {
                                     $objPasajero->eliminar();
                                 }
                             
-                            ;break;
+                                $objViaje->eliminar();
+
+                            break;
 
                             case 3:
                                 echo "3) Modificar viaje:\n";
@@ -203,7 +205,7 @@ do {
                                     $destinoNuevo = trim(fgets(STDIN));
                                     echo "Ingrese la cantidad maxima de pasajeros nuevo: ";
                                     $cantidadMaximaPasajerosNueva = trim(fgets(STDIN));
-                                    echo "Ingrese el ID empresa nuevo:\n";
+                                    echo "Ingrese el ID empresa nuevo:\n"; //CHEQUEARR  ***********************************
                                     $idEmpresaNuevo = trim(fgets(STDIN));
                                     if ($idEmpresaNuevo < 1 || $objEmpresa->buscar($idEmpresaNuevo) == false || $cantidadMaximaPasajerosNueva < 0 || !is_numeric($cantidadMaximaPasajerosNueva)){
                                         echo "No se encontro la empresa y/o hay datos invalidos en la capacidad de pasajeros 🙁\n";
@@ -219,7 +221,7 @@ do {
                                 }else{
                                     echo "Probablemente no existe una empresa creada \n";
                                 }
-                            ; break;
+                             break;
                         }
 
                         } while ($opcionViaje != 4);
@@ -344,27 +346,26 @@ do {
             } while ($opcionDatos != 4);
             break;
 
-        case 2: //crear viaje desde 0 
+        case 2: 
+            
+        /////////////////////////////////////
+        //crear empresa desde 0     
+        /////////////////////////////////////
             
             /*elimina el viaje el precargado*/
             if ($objEmpresa->listar()){
-                if($coleccionPersonas = $objPersona->listar()){
-                    foreach ($coleccionPersonas as $persona) {
-                        $objPersona->cargar(['nombre'=>'',
-                        'apellido' => '',
-                        'documento'=> "{$persona->getDocumento()}",
-                        'ptelefono'=> "",
-                        'idViaje'=> "1"]);
-                        $objPersona->eliminar();
+                $consulta = 'DELETE FROM persona;';
+                    if ($bd->Ejecutar($consulta)){
+                        echo "\033[42mSe eliminaron los datos precargados\n\033[0m";
+                        $objResponsable->eliminar();
+                        $objEmpresa->eliminarEmpresas();    
+                    } else {
+                        echo "\033[41mNo se eliminaron los datos precargados\n\033[0m";
                     }
-                }
-
-                $objViaje->eliminarViajes();
-                $objEmpresa->eliminarEmpresas();
-
+            }
                 
                 echo "\033[42mSe eliminaron los datos precargados\n\033[0m";
-            }
+            
             echo "\033[44m----| LA BASE DE DATOS ESTÁ EN VACÍA |----\033[0m\n";
             
             echo "CREAMOS LA BASE DE DATOS\n";
@@ -377,8 +378,11 @@ do {
             $direccionEmpresa = trim(fgets(STDIN));
             }while($idEmpresa < 0 || $nombreEmpresa == "" || $direccionEmpresa == "" || !is_numeric($idEmpresa) || is_numeric($nombreEmpresa));
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> d467f05d5113a03b4f7cc3172cc99122332d45ba
 
             echo "\033[44m----| CARGAMOS EL RESPONSABLE DEL VIAJE: |----\033[0m\n";
             echo "Ingrese su nombre:";
@@ -387,6 +391,7 @@ do {
             $apellidoResponsable = trim(fgets(STDIN));
             echo "Ingrese su telefono:";
             $numeroTelefonoResponsable = trim(fgets(STDIN));
+            //verificaciones de numeros 
             echo "Ingrese su numero documento:";
             $numeroDocumentoResponsable = trim(fgets(STDIN));
             echo "Ingrese su numero empleado:";
@@ -396,19 +401,24 @@ do {
 
             
             echo "\033[44m----| CARGAMOS EL VIAJE |----\033[0m\n";
+            do {
             echo "Ingrese su destino:";
             $destinoViaje = trim(fgets(STDIN));
             echo "Ingrese el ID del viaje:";
             $idViaje = trim(fgets(STDIN));
             echo "Ingrese la cantidad maxima de pasajeros:";
-            $cantidadMaximaPasajerosViaje = trim(fgets(STDIN));
-            echo "Ingrese el ID empresa:\n";
+                $cantidadMaximaPasajerosViaje = trim(fgets(STDIN));
+
+                if ($cantidadMaximaPasajerosViaje < 0 || !is_numeric($cantidadMaximaPasajerosViaje) || $idViaje < 0 || !is_numeric($idViaje) || $destinoViaje == "" || is_numeric($destinoViaje) || $objViaje->buscar($idViaje)){
+                    echo "Datos invalidos\n";
+                }
+            } while ($cantidadMaximaPasajerosViaje < 0 || !is_numeric($cantidadMaximaPasajerosViaje) || $idViaje < 0 || !is_numeric($idViaje) || $destinoViaje == "" || is_numeric($destinoViaje) || $objViaje->buscar($idViaje));
             
             echo "\033[44m----| CARGAMOS EL PASAJERO DEL VIAJE |----\033[0m\n";
             $coleccionPasajeros = [];
 
 
-                echo "Cuantos pasajeros quiere ingresar ?";
+                echo "Cuantos pasajeros quiere ingresar?\n";
                 $cantPasajeros = trim(fgets(STDIN));
 
                 while ($cantPasajeros < 0 || $cantPasajeros > $cantidadMaximaPasajerosViaje){
@@ -417,12 +427,14 @@ do {
                 }
 
                 for ($i=0; $i < $cantPasajeros; $i++) {
+                    echo "\n";
                     echo "Ingrese su nombre:";
                     $nombrePasajero = trim(fgets(STDIN));
                     echo "Ingrese su apellido:";
                     $apellidoPasajero = trim(fgets(STDIN));
                     echo "Ingrese su telefono:";
                     $numeroTelefonoPasajero = trim(fgets(STDIN));
+                    //verificar
                     echo "Ingrese su numero documento:";
                     $documentoPasajero = trim(fgets(STDIN));
                     
@@ -430,9 +442,9 @@ do {
                     array_push($coleccionPasajeros, $datosPasajero);
                 }
 
-            $datosEmpresa = ['idEmpresa' => $idEmpresa,'enombre' => $nombreEmpresa,'edireccion' => $direccionEmpresa, 'coleccionViajes' => []];
+            $datosEmpresa = ['idEmpresa' => 1,'enombre' => $nombreEmpresa,'edireccion' => $direccionEmpresa, 'coleccionViajes' => []];
             $datosResponsable = ['documento' => $numeroDocumentoResponsable,'rnumeroEmpleado' => $numeroEmpleadoResponsable,'rnumeroLicencia' => $numeroLicenciaResponsable,'nombre' => $nombreResponsable,'apellido' => $apellidoResponsable,'ptelefono' => $numeroTelefonoResponsable];
-            $datosViaje = ['idViaje' => $idViaje,'destino' => $destinoViaje,'cantidadMaximaPasajeros' => $cantidadMaximaPasajerosViaje,'idEmpresa' => $idEmpresa,'numeroEmpleado' => $numeroEmpleadoResponsable,'coleccionPasajeros' => $coleccionPasajeros];
+            $datosViaje = ['idViaje' => $idViaje,'destino' => $destinoViaje,'cantidadMaximaPasajeros' => $cantidadMaximaPasajerosViaje,'idEmpresa' => 1,'numeroEmpleado' => $numeroEmpleadoResponsable,'coleccionPasajeros' => $coleccionPasajeros];
             
             $objEmpresa->cargar($datosEmpresa);
             $objEmpresa->insertar();
@@ -461,6 +473,12 @@ do {
             do {
                 echo "*********************************\n";
                 echo "La empresa que esta cargada es:\n". $objEmpresa->listar()[0];
+                $viajes = $objViaje->listar("idviaje = 1");
+                $txt = "";
+                foreach($viajes as $viaje){
+                    $txt .= $viaje . "\n";
+                }
+                echo $txt;
                 
                 echo "Ingrese el ID del viaje para encontrar sus datos:";
                 $idViaje = trim(fgets(STDIN));
@@ -478,15 +496,35 @@ do {
                             echo "\033[/////////////////////////////// \033[0m";
                             echo "\nNo se encontro el viaje\n";
                             echo "\033[//////////////////////////////// \033[0m";
-
                         }
 
                         menuViaje();
                         $opcionViaje = trim(fgets(STDIN));
-                        
-                        if($opcionViaje == "1"){
-                            echo "2) Eliminar el viaje:\n";
-
+                        switch($opcionViaje){
+                            case 1: // ( [case 2]EMPRESA DESDE 0  --> agregar viaje  )
+                                ///
+                                /// AGREGAR VIAJE DESDE 0 ///
+                                ///
+                                ///
+                                ///
+                                ///
+                                ///
+                                break;
+                            case 2:
+                                echo "2) Modificar viaje:\n";
+                            
+                                echo "Ingrese el destino del viaje nuevo: ";
+                                $destinoNuevo = trim(fgets(STDIN));
+                                echo "Ingrese la cantidad maxima de pasajeros nuevo: ";
+                                $cantidadMaximaPasajerosNueva = trim(fgets(STDIN));
+                                
+                                $datosNuevos = ['idViaje'=> $idViaje ,'destino'=>$destinoNuevo, 'cantidadMaximaPasajeros'=> $cantidadMaximaPasajerosNueva, 'idEmpresa' => null, 'numeroEmpleado' =>null, 'coleccionPasajeros' => []];
+                            
+                                $objViaje->cargar($datosNuevos);
+                                $objViaje->modificar();
+                                break;
+                            case 3:
+                                 echo "3) Eliminar el viaje:\n";
                             echo "Para eliminar el viaje ,vamos a tener que borrar el responsable y los pasajeros";
 
                             $objPersona->buscar($numeroDocumentoResponsable);
@@ -505,21 +543,9 @@ do {
                             }else{
                                 echo "No se pudo eliminar\n";
                             }
-                        }else if($opcionViaje == "2"){
-                            echo "2) Modificar viaje:\n";
-                            
-                            echo "Ingrese el destino del viaje nuevo: ";
-                            $destinoNuevo = trim(fgets(STDIN));
-                            echo "Ingrese la cantidad maxima de pasajeros nuevo: ";
-                            $cantidadMaximaPasajerosNueva = trim(fgets(STDIN));
-                            
-                            $datosNuevos = ['idViaje'=> $idViaje ,'destino'=>$destinoNuevo, 'cantidadMaximaPasajeros'=> $cantidadMaximaPasajerosNueva, 'idEmpresa' => null, 'numeroEmpleado' =>null, 'coleccionPasajeros' => []];
-                            
-                            $objViaje->cargar($datosNuevos);
-                            $objViaje->modificar();
+                            break;
                         }
-
-                        } while ($opcionViaje != 3);
+                        } while ($opcionViaje != 4);
                         break;
 
                     case 2: /*Cargar Pasajero*/
@@ -528,7 +554,7 @@ do {
                             
                             $texto = "-------------------\n";
 
-                            $coleccionPasajeros = $objViaje->mostrarPasajeros();
+                            $coleccionPasajeros = $objPasajero->listar('idviaje = '. $idViaje);
                             foreach ($coleccionPasajeros as $pasajero) {
                                 $texto .= $pasajero . "\n--------------------\n";
                             }
@@ -629,73 +655,176 @@ do {
             } while ($opcionDatos != 4);
             break;
 
-        case 3:  /** VIAJE: agregar/ modificar/ eliminar */
-            $objViaje->listar();
-            echo "\nIngrese el id del viaje que desea modificar\n";
+        case 3: 
+            /** CREAR VIAJE*/
+            if ($objEmpresa->listar()){
+                echo "*********************************\n";
+                echo "La empresa que esta cargada es:\n". $objEmpresa->listar()[0]. "y sus vuelos son:";
+                $viajes = $objViaje->listar();
+                $txt = "";
+                foreach($viajes as $viaje){
+                    $txt .= $viaje . "\n";
+                }
+                echo $txt;
+
+                do {
+                    echo "\033[1;33mCREACION DEL VIAJE\n";
+                    echo "ingrese el id del viaje que quiere crear\n";
             $idViaje = trim(fgets(STDIN));
-            
-            do {
-            
-            if ($objViaje->Buscar($idViaje)){
-                menuViajes();
+                    if ($idViaje < 0 || !is_numeric($idViaje) || $objViaje->buscar($idViaje)){
+                        echo "Datos invalidos\n";
+                    }
+                } while($idViaje < 0 || !is_numeric($idViaje) || $objViaje->buscar($idViaje));
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  do{//MENU VIAJE CON LAS MODIFICACIONES CORRESPONDIENTES
+                    menuViaje();
+                    
                $opcion = trim(fgets(STDIN));
-                if($opcion == 1){
+
+                    switch ($opcion) {
+
+                        case 1://agregar viaje -> agregar viaje
                     echo "Ingrese los datos del nuevo VIAJE\n";
                     echo "Ingrese el Destino del viaje: \n";
                     $destinoViaje = trim(fgets(STDIN));
-                    do{
+                            do {
                         echo "Ingrese la cantidad maxima de pasajeros: \n";
                         $cantMaximaPasajeros = trim(fgets(STDIN));
-                        if($cantMaximaPasajeros < 0){
+                                if ($cantMaximaPasajeros < 0) {
                             echo "DATO INVALIDO.";
                         }
-                    }while($cantMaximaPasajeros>0);
+                            } while ($cantMaximaPasajeros < 0);
 
                     do {
-                        $objEmpresa->listar();
+                                $empresas = $objEmpresa->listar();
+                                $txt = "";
+                                foreach ($empresas as $empresa) {
+                                    $txt .= $empresa . "\n";
+                                }
+                                echo $txt;
+
                         echo "Ingrese el ID de la empresa a la que va a pertenecer: \n";
                         $idEmpresa = trim(fgets(STDIN));
-                        if(!$objEmpresa->buscar($idEmpresa)){
+                                if (!$objEmpresa->buscar($idEmpresa)) {
                             echo "Esa empresa no existe";
                         }
-                    }while (!$objEmpresa->buscar($idEmpresa));
+                            } while (!$objEmpresa->buscar($idEmpresa));
                     do {
-                        echo "Ingrese el 'Numero de empleado' a cargo \n";
-                        $numEmpleado = trim(fgets(STDIN));
+                                echo "Ingrese el 'DNI' del responsable a cargo \n";
+                                $numDocumento = trim(fgets(STDIN));
+                            } while ($numDocumento < 0 || !is_numeric($numDocumento));
 
-                    }while ($numEmpleado < 0 && !is_numeric($numEmpleado));
-
-                    if(!$objViaje->buscar($numEmpleado)){ 
+                            if (!$objResponsable->buscar($numDocumento)) {
                         echo "Creamos ";   //si NO existe ese empleado lo creamos
-                    }else {
+                            } else {
                         echo "El empleado por defecto"; // si existe queda ese empleado con ese ID
                     }
-                   
 
                      $objViaje->cargar($datos);
                      $objViaje->insertar();
+                            break;
 
-                }elseif($opcion == 2){ /** MODIFICAR VIAJE */
-                    
-                    $objViaje->modificar();
-                }elseif($opcion == 3){ /** ELIMINAR */
+                        case 2: // agregar viaje -> eliminar VIAJE 
+                            echo "2) Eliminar viaje:\n";
+                            
+                            $viajes = $objViaje->listar();
+                            $txt = "";
+                            foreach($viajes as $viaje){
+                                $txt .= $viaje . "\n";
+                            }
+                            echo $txt;
+                            
+                            echo "Vamos eliminar el viaje, tendremos que borrar el responsable y los pasajeros\n";
+                            echo "Ingrese el ID del viaje que quiere eliminar\n";
+                            $idViajeEliminar = trim(fgets(STDIN));
+                            
+                            //$objResponsable->buscar();
+                            //////////////////////////////////////////////////////////////////////////////revisar $datosPasajero =  $objPasajero->listar('idviaje = '. $idViajeEliminar);
+                            if($objViaje->Buscar($idViajeEliminar)){
+                                $datosPasajero =  $objPasajero->listar('idviaje = '. $idViajeEliminar);
+                                foreach ($datosPasajero as $pasajero) {
+                                    $objPasajero = new Pasajero();
+                                    $objPasajero->eliminar();
+                                }
                     $objViaje->eliminar();
-                }
-                    
+
             }else {
-                echo "El viaje con el id ". $idViaje . " no existe.\n";
+                                echo "El viaje con ese ID NO existe\n";
+                            }
+                         break;
+
+                        case 3: // agregar viaje -> modificar VIAJE 
+                            
+                            echo "3) Modificar viaje:\n";   
+                            do{
+                                echo "Ingrese el destino del viaje nuevo: ";
+                                $destinoNuevo = trim(fgets(STDIN));
+                                echo "Ingrese la cantidad maxima de pasajeros nuevo: ";
+                                $cantidadMaximaPasajerosNueva = trim(fgets(STDIN));
+                                echo "Ingrese el ID empresa nuevo:\n";
+                                $idEmpresaNuevo = trim(fgets(STDIN));
+
+                                if ($idEmpresaNuevo < 1 || $objEmpresa->buscar($idEmpresaNuevo) == false){
+                                    echo "No se encontro la empresa y/o hay datos invalidos en la capacidad de pasajeros 🙁\n";
+                                }
+                                
+                            } while ($idEmpresaNuevo < 1 || $objEmpresa->buscar($idEmpresaNuevo) == false);
+                            
+                            $datosNuevos = ['idViaje'=> $idViaje ,'destino'=>$destinoNuevo, 'cantidadMaximaPasajeros'=> $cantidadMaximaPasajerosNueva, 'idEmpresa' => $idEmpresaNuevo, 'numeroEmpleado' =>1, 'coleccionPasajeros' => []];
+                            echo "Se modifico el viaje correctamente !!\n";
+                            $objViaje->cargar($datosNuevos);
+
+                            if($objViaje->modificar()){
+                                echo "Se modifico el viaje correctamente !!";
+                            
+                            }else{
+                                echo "Probablemente no existe una empresa creada \n";
+                            }
+                            
+                            break;
+                        default:
+
+                            echo "Opción inválida";
+                            break;
             }
         }while ($opcion != 4);
 
+                } else {
+                    echo "No hay empresas cargadas\n";
+                }
 
-
+            break;
         case 4:
             echo "Gracias por usar nuestro servicio.\n";
             break;
             
-    }
+    }//fin del switch    
 } while ($opcionPrincipal != 3);
-
 } else {
     echo "Conexion fallida";
 }
