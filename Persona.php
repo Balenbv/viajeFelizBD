@@ -117,7 +117,7 @@ class Persona {
 		$base = new bdViajeFeliz();
 		$resp = false;
 		$consultaInsertar = "INSERT INTO Persona(documento, apellido, nombre, ptelefono) 
-				VALUES (" . $this->getDocumento() . ",'" . $this->getApellido() . "','" . $this->getNombre() . "','" . $this->getPTelefono() . "')";
+				VALUES ('" . $this->getDocumento() . "','" . $this->getApellido() . "','" . $this->getNombre() . "','" . $this->getPTelefono() . "')";
 
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaInsertar)) {

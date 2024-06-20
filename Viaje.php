@@ -158,7 +158,7 @@ class Viaje
         $base = new bdViajeFeliz();
         $resp = false;
         $consultaInsertar = "INSERT INTO viaje(idviaje,vdestino, vcantmaxpasajeros,idempresa,rnumeroempleado) VALUES 
-        (" . $this->getIdViaje() . ",'" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "'," . $this->getIdEmpresa() . "," . $this->getResponsableV(). ")";
+        ('"  . $this->getIdViaje() . "','" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "','" . $this->getIdEmpresa() . "','" . $this->getResponsableV(). "')";
         
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
