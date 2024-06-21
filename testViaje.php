@@ -314,6 +314,7 @@ do {
                         } while ($opcionPasajero != 4);
                         break;
                         
+                        
                     case 3:/*Cargar Responsable*/
                         menuResponsable();
                         do {
