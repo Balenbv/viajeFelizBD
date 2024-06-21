@@ -91,9 +91,9 @@ do {
             ////////////////////////////////
             if ($objEmpresa->listar()){
                 echo "*********************************\n";
-                echo "La empresa que esta cargada es:\n". $objEmpresa->listar()[0]. "y sus vuelos son:";
+                echo "\033[32mLa empresa que está cargada es:\n" . $objEmpresa->listar()[0] . " y sus vuelos son:\033[0m";
 
-                $viajes = $objViaje->listar("idviaje = 1");
+                $viajes = $objViaje->listar("idempresa = 1");
                 $txt = "";
                 foreach($viajes as $viaje){
                     $txt .= $viaje . "\n";
@@ -147,9 +147,9 @@ do {
                     }
                     
                     echo "*********************************\n";
-                    echo "La empresa que esta cargada es:\n". $objEmpresa->listar()[0]. "y sus vuelos son:";
+                    echo "\033[32mLa empresa que está cargada es:\n" . $objEmpresa->listar()[0] . " y sus vuelos son:\033[0m";
     
-                    $viajes = $objViaje->listar("idviaje = 1");
+                    $viajes = $objViaje->listar("idempresa = 1");
                     $txt = "";
                     foreach($viajes as $viaje){
                         $txt .= $viaje . "\n";
@@ -408,45 +408,54 @@ do {
             
             echo "\033[44m----| LA BASE DE DATOS ESTÁ EN VACÍA |----\033[0m\n";
             
-            echo "CREAMOS LA BASE DE DATOS\n";
-            do{
-            echo "Ingrese el nombre de la empresa:";
-            $nombreEmpresa = trim(fgets(STDIN));
-            echo "Ingrese el ID de la empresa:";
-            $idEmpresa = trim(fgets(STDIN));
-            echo "Ingrese la direccion de la empresa:";
-            $direccionEmpresa = trim(fgets(STDIN));
-            }while($idEmpresa < 0 || $nombreEmpresa == "" || $direccionEmpresa == "" || !is_numeric($idEmpresa) || is_numeric($nombreEmpresa));
-
-
-
+            echo "CREEMOS LA BASE DE DATOS 😁\n";
+            do {
+                echo "Ingrese el nombre de la empresa: ";
+                $nombreEmpresa = trim(fgets(STDIN));
+                echo "Ingrese el ID de la empresa: ";
+                $idEmpresa = trim(fgets(STDIN));
+                echo "Ingrese la direccion de la empresa: ";
+                $direccionEmpresa = trim(fgets(STDIN));
+                if ($idEmpresa < 0 || $nombreEmpresa == "" || $direccionEmpresa == "" || !is_numeric($idEmpresa) || is_numeric($nombreEmpresa)) {
+                    echo "\033[31mDatos inválidos\nLos datos deben ser numéricos mayores a 0 😕\033[0m\n";
+                }
+            } while ($idEmpresa < 0 || $nombreEmpresa == "" || $direccionEmpresa == "" || !is_numeric($idEmpresa) || is_numeric($nombreEmpresa));
 
             echo "\033[44m----| CARGAMOS EL RESPONSABLE DEL VIAJE: |----\033[0m\n";
-            echo "Ingrese su nombre:";
-            $nombreResponsable = trim(fgets(STDIN));
-            echo "Ingrese su apellido:";
-            $apellidoResponsable = trim(fgets(STDIN));
-            echo "Ingrese su telefono:";
-            $numeroTelefonoResponsable = trim(fgets(STDIN));
-            //verificaciones de numeros 
-            echo "Ingrese su numero documento:";
-            $numeroDocumentoResponsable = trim(fgets(STDIN));
-            echo "Ingrese su numero empleado:";
-            $numeroEmpleadoResponsable = trim(fgets(STDIN));
-            echo "Ingrese su numero de licencia:";
-            $numeroLicenciaResponsable = trim(fgets(STDIN));
+            do {
+                echo "Ingrese su nombre: ";
+                $nombreResponsable = trim(fgets(STDIN));
+                echo "Ingrese su apellido: ";
+                $apellidoResponsable = trim(fgets(STDIN));
+                if ($nombreResponsable == "" || $apellidoResponsable == "" || is_numeric($nombreResponsable) || is_numeric($apellidoResponsable)) {
+                    echo "\033[41mDatos inválidos\nLos datos deben ser texto 😕\033[0m\n";
+                }
+            } while ($nombreResponsable == "" || $apellidoResponsable == "" || is_numeric($nombreResponsable) || is_numeric($apellidoResponsable));
+            do {
+                echo "Ingrese su telefono: ";
+                $numeroTelefonoResponsable = trim(fgets(STDIN));
+                //verificaciones de numeros 
+                echo "Ingrese su numero documento: ";
+                $numeroDocumentoResponsable = trim(fgets(STDIN));
+                echo "Ingrese su numero empleado: ";
+                $numeroEmpleadoResponsable = trim(fgets(STDIN));
+                echo "Ingrese su numero de licencia: ";
+                $numeroLicenciaResponsable = trim(fgets(STDIN));
+                if ($numeroTelefonoResponsable < 0 || !is_numeric($numeroTelefonoResponsable) || $numeroDocumentoResponsable < 0 || !is_numeric($numeroDocumentoResponsable) || $numeroEmpleadoResponsable < 0 || !is_numeric($numeroEmpleadoResponsable) || $numeroLicenciaResponsable < 0 || !is_numeric($numeroLicenciaResponsable)) {
+                    echo "\033[41mDatos inválidos\nLos datos deben ser numéricos mayores a 0 😕\033[0m\n";
+                }
+            } while (!is_numeric($numeroTelefonoResponsable) || $numeroTelefonoResponsable < 0 || $numeroDocumentoResponsable < 0 || !is_numeric($numeroDocumentoResponsable) || $numeroEmpleadoResponsable < 0 || !is_numeric($numeroEmpleadoResponsable) || $numeroLicenciaResponsable < 0 || !is_numeric($numeroLicenciaResponsable));
 
-            
             echo "\033[44m----| CARGAMOS EL VIAJE |----\033[0m\n";
             do {
-                echo "Ingrese su destino:";
+                echo "Ingrese su destino: ";
                 $destinoViaje = trim(fgets(STDIN));
-                echo "Ingrese el ID del viaje:";
+                echo "Ingrese el ID del viaje: ";
                 $idViaje = trim(fgets(STDIN));
-                echo "Ingrese la cantidad maxima de pasajeros:";
+                echo "Ingrese la cantidad maxima de pasajeros: ";
                 $cantidadMaximaPasajerosViaje = trim(fgets(STDIN));
 
-                if ($cantidadMaximaPasajerosViaje < 0 || !is_numeric($cantidadMaximaPasajerosViaje) || $idViaje < 0 || !is_numeric($idViaje) || $destinoViaje == "" || is_numeric($destinoViaje) || $objViaje->buscar($idViaje)){
+                if ($cantidadMaximaPasajerosViaje < 0 || !is_numeric($cantidadMaximaPasajerosViaje) || $idViaje < 0 || !is_numeric($idViaje) || $destinoViaje == "" || is_numeric($destinoViaje) || $objViaje->buscar($idViaje)) {
                     echo "Datos invalidos\n";
                 }
             } while ($cantidadMaximaPasajerosViaje < 0 || !is_numeric($cantidadMaximaPasajerosViaje) || $idViaje < 0 || !is_numeric($idViaje) || $destinoViaje == "" || is_numeric($destinoViaje) || $objViaje->buscar($idViaje));
@@ -454,53 +463,51 @@ do {
             echo "\033[44m----| CARGAMOS EL PASAJERO DEL VIAJE |----\033[0m\n";
             $coleccionPasajeros = [];
 
+            echo "Cuantos pasajeros quiere ingresar?\n";
+            $cantPasajeros = trim(fgets(STDIN));
 
-                echo "Cuantos pasajeros quiere ingresar?\n";
+            while ($cantPasajeros < 0 || $cantPasajeros > $cantidadMaximaPasajerosViaje) {
+                echo "Ingrese un numero valido\n";
                 $cantPasajeros = trim(fgets(STDIN));
+            }
 
-                while ($cantPasajeros < 0 || $cantPasajeros > $cantidadMaximaPasajerosViaje){
-                    echo "Ingrese un numero valido\n";
-                    $cantPasajeros = trim(fgets(STDIN));
-                }
+            for ($i = 0; $i < $cantPasajeros; $i++) {
+                echo "\n";
+                echo "Ingrese su nombre: ";
+                $nombrePasajero = trim(fgets(STDIN));
+                echo "Ingrese su apellido: ";
+                $apellidoPasajero = trim(fgets(STDIN));
+                echo "Ingrese su telefono: ";
+                $numeroTelefonoPasajero = trim(fgets(STDIN));
+                //verificar
+                do {
+                    echo "Ingrese su numero documento:";
+                    $documentoPasajero = trim(fgets(STDIN));
+                    if ($documentoPasajero == $numeroDocumentoResponsable) {
+                        echo "ese es el documento del responsable que estas queriendo ingresar 😅\n";
+                    }
+                } while ($documentoPasajero == $numeroDocumentoResponsable);
+                $datosPasajero = ['nombre' => $nombrePasajero, 'apellido' => $apellidoPasajero, 'documento' => $documentoPasajero, 'ptelefono' => $numeroTelefonoPasajero, 'idViaje' => $idViaje];
+                array_push($coleccionPasajeros, $datosPasajero);
+            }
 
-                for ($i=0; $i < $cantPasajeros; $i++) {
-                    echo "\n";
-                    echo "Ingrese su nombre:";
-                    $nombrePasajero = trim(fgets(STDIN));
-                    echo "Ingrese su apellido:";
-                    $apellidoPasajero = trim(fgets(STDIN));
-                    echo "Ingrese su telefono:";
-                    $numeroTelefonoPasajero = trim(fgets(STDIN));
-                    //verificar
-                    do {
-                        echo "Ingrese su numero documento:";
-                        $documentoPasajero = trim(fgets(STDIN));
-                        if ($documentoPasajero == $numeroDocumentoResponsable){
-                            echo "ese es el documento del responsable que estas queriendo ingresar 😅\n";
-                        } 
-                    } while ($documentoPasajero == $numeroDocumentoResponsable);
-                    $datosPasajero = ['nombre'=>$nombrePasajero,'apellido'=>$apellidoPasajero,'documento'=>$documentoPasajero,'ptelefono'=>$numeroTelefonoPasajero,'idViaje'=>$idViaje];
-                    array_push($coleccionPasajeros, $datosPasajero);
-                }
+            $datosEmpresa = ['idEmpresa' => 1, 'enombre' => $nombreEmpresa, 'edireccion' => $direccionEmpresa, 'coleccionViajes' => []];
+            $datosResponsable = ['documento' => $numeroDocumentoResponsable, 'rnumeroEmpleado' => $numeroEmpleadoResponsable, 'rnumeroLicencia' => $numeroLicenciaResponsable, 'nombre' => $nombreResponsable, 'apellido' => $apellidoResponsable, 'ptelefono' => $numeroTelefonoResponsable];
+            $datosViaje = ['idViaje' => $idViaje, 'destino' => $destinoViaje, 'cantidadMaximaPasajeros' => $cantidadMaximaPasajerosViaje, 'idEmpresa' => 1, 'numeroEmpleado' => $numeroEmpleadoResponsable, 'coleccionPasajeros' => $coleccionPasajeros];
 
-            $datosEmpresa = ['idEmpresa' => 1,'enombre' => $nombreEmpresa,'edireccion' => $direccionEmpresa, 'coleccionViajes' => []];
-            $datosResponsable = ['documento' => $numeroDocumentoResponsable,'rnumeroEmpleado' => $numeroEmpleadoResponsable,'rnumeroLicencia' => $numeroLicenciaResponsable,'nombre' => $nombreResponsable,'apellido' => $apellidoResponsable,'ptelefono' => $numeroTelefonoResponsable];
-            $datosViaje = ['idViaje' => $idViaje,'destino' => $destinoViaje,'cantidadMaximaPasajeros' => $cantidadMaximaPasajerosViaje,'idEmpresa' => 1,'numeroEmpleado' => $numeroEmpleadoResponsable,'coleccionPasajeros' => $coleccionPasajeros];
-            
             $objEmpresa->cargar($datosEmpresa);
             $objEmpresa->insertar();
-            
+
             $objResponsable->cargar($datosResponsable);
             $objResponsable->insertar();
-            
+
             $objViaje->cargar($datosViaje);
             $objViaje->insertar();
-                    
-            foreach ($coleccionPasajeros as $pasajero){
+
+            foreach ($coleccionPasajeros as $pasajero) {
                 $objPasajero->cargar($pasajero);
                 $objPasajero->insertar();
             }
-                    
             if ($objEmpresa->listar()){
                 echo "\033[42mSe cargó correctamente✅\033[0m\n";
                 echo "los datos de la empresa y el viaje creado son:\n";
@@ -515,7 +522,7 @@ do {
             do {
                 
                 echo "*********************************\n";
-                echo "La empresa que esta cargada es:\n". $objEmpresa->listar()[0];
+                echo "\033[44mLa empresa que esta cargada es:\n". $objEmpresa->listar()[0] . "\033[0m";
                 $viajes = $objViaje->listar("idviaje = 1");
                 $txt = "";
                 foreach($viajes as $viaje){
@@ -613,8 +620,12 @@ do {
                                     $documentoPasajero = trim(fgets(STDIN));
                                     echo "Ingrese el telefono del pasajero: ";
                                     $telefonoPasajero = trim(fgets(STDIN));
-                                    $datosPasajero = ['nombre' => $nombrePasajero, 'apellido' => $apellidoPasajero, 'documento' => $documentoPasajero, 'ptelefono' => $telefonoPasajero, 'idViaje' => $idViaje];
-                                    $objViaje->crearPasajero($datosPasajero);
+                                    if($objPersona->buscar($documentoPasajero)){
+                                        echo "\033[41mEl documento pertenece a otra persona\033[0m\n";
+                                    } else {
+                                        $datosPasajero = ['nombre' => $nombrePasajero, 'apellido' => $apellidoPasajero, 'documento' => $documentoPasajero, 'ptelefono' => $telefonoPasajero, 'idViaje' => $idViaje];
+                                        $objViaje->crearPasajero($datosPasajero);
+                                    }
                                 } else {
                                     echo "No se pueden agregar mas pasajeros\n";
                                 }
