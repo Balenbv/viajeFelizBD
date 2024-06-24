@@ -183,12 +183,14 @@ class Viaje
     {
         $base = new bdViajeFeliz();
         $resp = false;
-        $consultaInsertar = "INSERT INTO viaje(idviaje,vdestino, vcantmaxpasajeros,objEmpresa,rnumeroempleado) VALUES 
-        ('"  . $this->getIdViaje() . "','" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "','" . $this->getobjEmpresa() . "','" . $this->getResponsableV(). "')";
-        
+        echo $this->getobjEmpresa();
+        $consultaInsertar = "INSERT INTO viaje(vdestino, vcantmaxpasajeros,idempresa,rnumeroempleado) VALUES 
+        ('" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "','" . $this->getobjEmpresa()->getIdEmpresa() . "','" . $this->getResponsableV()->getNumeroEmpleado(). "')";
+
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
                 $resp = true;
+                $this->setIdViaje($base->devuelveIDInsercion());
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
@@ -202,9 +204,9 @@ class Viaje
     {
         $resp = false;
         $base = new bdViajeFeliz();
-        $consultaModifica = "UPDATE viaje SET vdestino ='{$this->getDestino()}', vcantmaxpasajeros = {$this->getCantidadMaximaPasajeros()}, objEmpresa = {$this->getobjEmpresa()} WHERE idviaje = {$this->getIdViaje()}";
-        //UPDATE viaje SET vdestino = 'londres', vcantmaxpasajeros = 80, objEmpresa = 1 where idviaje = 1
-        
+        $consultaModifica = "UPDATE viaje SET vdestino ='{$this->getDestino()}', vcantmaxpasajeros = {$this->getCantidadMaximaPasajeros()}, idempresa = {$this->getobjEmpresa()}, rnumeroempleado = {$this->getResponsableV()->getNumeroEmpleado()} WHERE idviaje = {$this->getIdViaje()}";
+        //objEmpleado
+
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
@@ -217,6 +219,29 @@ class Viaje
 
         return $resp;
     }
+
+    public function modificarResponsable($datos){
+        //TESTEADO
+        $base = new bdViajeFeliz();
+        $bandera = false;
+
+        if($base->iniciar()){
+            $responsable = new ResponsableV();
+            $responsable->cargar($datos);
+
+            if($responsable->modificar()){
+                $bandera = true;
+            }else{
+                $this->setmensajeoperacion($base->getError());
+            }
+
+        }else{
+            $this->setmensajeoperacion($base->getError());
+        }
+
+        return $bandera;
+    }
+
 
     public function eliminar()
     {
@@ -347,19 +372,7 @@ class Viaje
         return $bandera;
     }
 
-    public function devuelveIDInsercion($consulta){
-        $resp = null;
-        unset($this->ERROR);
-        $this->QUERY = $consulta;
-        if ($this->RESULT = mysqli_query($this->CONEXION,$consulta)){
-            $id = mysqli_insert_id();
-            $resp =  $id;
-        } else {
-            $this->ERROR =mysqli_errno( $this->CONEXION) . ": " . mysqli_error( $this->CONEXION);
-           
-        }
-    return $resp;
-    }
+
 
     public function eliminarPasajero($datos){
         $base = new bdViajeFeliz();
@@ -399,30 +412,6 @@ class Viaje
 
         return $booleano;
     } 
-
-    
-    
-    public function modificarResponsable($datos){
-        //TESTEADO
-        $base = new bdViajeFeliz();
-        $bandera = false;
-
-        if($base->iniciar()){
-            $responsable = new ResponsableV();
-            $responsable->cargar($datos);
-
-            if($responsable->modificar()){
-                $bandera = true;
-            }else{
-                $this->setmensajeoperacion($base->getError());
-            }
-
-        }else{
-            $this->setmensajeoperacion($base->getError());
-        }
-
-        return $bandera;
-    }
 
     public function mostrarResponsable(){
         

@@ -99,14 +99,24 @@ class ResponsableV extends Persona
     }
 
     public function insertar(){
-        $base=new bdViajeFeliz();
-        $resp= false;
-
+        $base = new bdViajeFeliz();
+        $resp = false;
+    
         if(parent::insertar()){
-            $consultaInsertar = "INSERT INTO responsable(rdocumento, rnumeroempleado, rnumerolicencia) VALUES ('".parent::getDocumento()."','".$this->getNumeroEmpleado()."','".$this->getNumeroLicencia()."')";
+            echo "entro\n";
+            $consultaInsertar = "INSERT INTO responsable(rdocumento, rnumerolicencia) VALUES ('".parent::getDocumento()."','".$this->getNumeroLicencia()."')";
             if($base->Iniciar()){
+                echo "entro2\n";
                 if($base->Ejecutar($consultaInsertar)){
-                    $resp=  true;
+                    echo "entro3\n";
+                    
+                    $id = $base->devuelveIDInsercion();
+                    if($id !== null) {
+                        $this->setNumeroEmpleado($id);
+                        $resp = true;
+                    } else {
+                        $this->setmensajeoperacion($base->getError());
+                    }
                 } else {
                     $this->setmensajeoperacion($base->getError());
                 }
