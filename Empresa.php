@@ -73,7 +73,7 @@ class Empresa{
         $this->setColeccionViajes($datos['coleccionViajes']);
     }
 
-    public function buscar($idEmpresa){
+    public function Buscar($idEmpresa){
         $base = new bdViajeFeliz();
         $consulta = "SELECT * FROM empresa WHERE idempresa = " . $idEmpresa;
         $resp = false;

@@ -48,17 +48,17 @@ class ResponsableV extends Persona
         $this->numeroLiciencia = $newNumeroLicencia;
     }
 
-    public function Buscar($documento)
+    public function Buscar($rnumeroempleado)
 	{
 		$base = new bdViajeFeliz();
-		$consultaPersona = "SELECT * from responsable where rdocumento=" . $documento;
+		$consultaPersona = "SELECT * from responsable where rnumeroempleado=" . $rnumeroempleado;
 		$resp = false;
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaPersona)) {
 				if ($row2 = $base->Registro()) {
-					parent::Buscar($documento);
                     $this->setNumeroEmpleado($row2['rnumeroempleado']);
                     $this->setNumeroLicencia($row2['rnumerolicencia']);
+                    parent::Buscar($row2['rdocumento']);
 					$resp = true;
 				}
 			} else {

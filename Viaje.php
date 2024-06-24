@@ -5,7 +5,7 @@ class Viaje
     private $idViaje;                                       //idviaje varchar AUTO_INCREMENT,
     private $destino;                                       //vdestino varchar(150),
     private $cantidadMaximaPasajeros;                       //vcantmaxpasajeros int,
-    private $idEmpresa;                                     //idempresa varchar,
+    private $objEmpresa;                                     //objEmpresa varchar,
     private $objResponsableV;                               //rnumeroempleado varchar,                                      
     private $ColeccionObjsPasajeros;                        
     private $mensajeoperacion;                    
@@ -24,8 +24,8 @@ class Viaje
         $this->setIdViaje($datos['idViaje']);
         $this->setDestino($datos['destino']);
         $this->setCantidadMaximaPasajeros($datos['cantidadMaximaPasajeros']);
-        $this->setIdEmpresa($datos['idEmpresa']);
-        $this->setResponsableV($datos['numeroEmpleado']);
+        $this->setobjEmpresa($datos['objEmpresa']);
+        $this->setResponsableV($datos['objEmpleado']);
         $this->setColeccionPasajero($datos['coleccionPasajeros']);
     }
 
@@ -59,18 +59,18 @@ class Viaje
         return $this->mensajeoperacion;
     }
 
-    public function getIdEmpresa()
+    public function getobjEmpresa()
     {
-        return $this->idEmpresa;
+        return $this->objEmpresa;
     }  
 
     public function setColeccionPasajero($newColeccionPasajero){
         $this->ColeccionObjsPasajeros = $newColeccionPasajero;
     }
     
-    public function setIdEmpresa($newIdEmpresa)
+    public function setobjEmpresa($newobjEmpresa)
     {
-        $this->idEmpresa = $newIdEmpresa;
+        $this->objEmpresa = $newobjEmpresa;
     }
 
     public function setIdViaje($newIdViaje)
@@ -111,10 +111,19 @@ class Viaje
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaViaje)) {
                 if ($row2 = $base->Registro()){
+                    $objResponsableV = new ResponsableV();
+                    $objEmpresa = new Empresa();
+                    $objPasajero = new Pasajero();
+                    
+                    $objEmpresa->Buscar($row2['idempresa']);
+                    $objResponsableV->Buscar($row2['rnumeroempleado']);
+                    $objPasajero->Buscar("idviaje = " . $row2['idviaje']);
+
                     $this->setIdViaje($idViaje);
                     $this->setDestino($row2['vdestino']);
                     $this->setCantidadMaximaPasajeros($row2['vcantmaxpasajeros']);
-                    $this->setResponsableV($row2['rnumeroempleado']); 
+                    $this->setobjEmpresa($objEmpresa);
+                    $this->setResponsableV($objResponsableV); 
                     $resp = true;
                 }
             } else {
@@ -137,23 +146,29 @@ class Viaje
         $consulta .= " order by idviaje";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
-                $arreglo = array();
+                $arreglo = [];
+                
+                $obj = new Viaje();
+                $objResponsableV = new ResponsableV();
+                $objEmpresa = new Empresa();
+                $objPasajero = new Pasajero();
 
                 while ($row2 = $base->Registro()) {
-                    $obj = new Viaje();
-                    
-                    $datos = ['idViaje' => $row2['idviaje'],
-                    'destino' => $row2['vdestino'],
-                    'cantidadMaximaPasajeros' => $row2['vcantmaxpasajeros'],
-                    'idEmpresa' => $row2['idempresa'],
-                    'numeroEmpleado' => $row2['rnumeroempleado'],
-                    'coleccionPasajeros' => $this->getColeccionObjsPasajeros()
+                    $objResponsableV->Buscar($row2['rnumeroempleado']);
+                    $objEmpresa->Buscar($row2['idempresa']);
+
+                    $datos = [
+                        'idViaje' => $row2['idviaje'],
+                        'destino' => $row2['vdestino'],
+                        'cantidadMaximaPasajeros' => $row2['vcantmaxpasajeros'],
+                        'objEmpresa' => $objEmpresa,
+                        'objEmpleado' => $objResponsableV,
+                        'coleccionPasajeros' =>  $objPasajero->Listar("idviaje = " . $row2['idviaje'])
                     ];
 
                     $obj->cargar($datos);
                     array_push($arreglo, $obj);
                 }
-                
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
@@ -168,8 +183,8 @@ class Viaje
     {
         $base = new bdViajeFeliz();
         $resp = false;
-        $consultaInsertar = "INSERT INTO viaje(idviaje,vdestino, vcantmaxpasajeros,idempresa,rnumeroempleado) VALUES 
-        ('"  . $this->getIdViaje() . "','" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "','" . $this->getIdEmpresa() . "','" . $this->getResponsableV(). "')";
+        $consultaInsertar = "INSERT INTO viaje(idviaje,vdestino, vcantmaxpasajeros,objEmpresa,rnumeroempleado) VALUES 
+        ('"  . $this->getIdViaje() . "','" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "','" . $this->getobjEmpresa() . "','" . $this->getResponsableV(). "')";
         
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
@@ -187,8 +202,8 @@ class Viaje
     {
         $resp = false;
         $base = new bdViajeFeliz();
-        $consultaModifica = "UPDATE viaje SET vdestino ='{$this->getDestino()}', vcantmaxpasajeros = {$this->getCantidadMaximaPasajeros()}, idempresa = {$this->getIdEmpresa()} WHERE idviaje = {$this->getIdViaje()}";
-        //UPDATE viaje SET vdestino = 'londres', vcantmaxpasajeros = 80, idempresa = 1 where idviaje = 1
+        $consultaModifica = "UPDATE viaje SET vdestino ='{$this->getDestino()}', vcantmaxpasajeros = {$this->getCantidadMaximaPasajeros()}, objEmpresa = {$this->getobjEmpresa()} WHERE idviaje = {$this->getIdViaje()}";
+        //UPDATE viaje SET vdestino = 'londres', vcantmaxpasajeros = 80, objEmpresa = 1 where idviaje = 1
         
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
@@ -330,6 +345,20 @@ class Viaje
         }
 
         return $bandera;
+    }
+
+    public function devuelveIDInsercion($consulta){
+        $resp = null;
+        unset($this->ERROR);
+        $this->QUERY = $consulta;
+        if ($this->RESULT = mysqli_query($this->CONEXION,$consulta)){
+            $id = mysqli_insert_id();
+            $resp =  $id;
+        } else {
+            $this->ERROR =mysqli_errno( $this->CONEXION) . ": " . mysqli_error( $this->CONEXION);
+           
+        }
+    return $resp;
     }
 
     public function eliminarPasajero($datos){
