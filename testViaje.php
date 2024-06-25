@@ -92,6 +92,7 @@ do {
             if ($coleccionEmpresas = $objEmpresa->listar()){
                 $textoEmpresas = '';
                 $i=0;
+                print_r($coleccionEmpresas);
                 foreach ($coleccionEmpresas as $empresa) {
                     if($i % 2 == 0){
                         echo "\033[36mEmpresa numero $i\n" . $empresa . "-------------------\n" . "y sus vuelos son:" . $empresa->mostrarViajes() . "\033[0m";
@@ -144,17 +145,18 @@ do {
                     }
 
                     $objViaje->setColeccionPasajero($objPasajero->listar("idviaje = ". $objViaje->getIdViaje()));
-                    if ($objEmpresa->listar()){
-                        $viajes = $objEmpresa->getColeccionViajes();
-                        array_push($viajes, $objViaje);
-                        $objEmpresa->setColeccionViajes($viajes);
-                    } else {
-                        "\033[31mNo se cargó\033[0m\n";
-                    }
+                    
+                    $viajes = $objEmpresa->getColeccionViajes();
+                    array_push($viajes, $objViaje);
+                    $objEmpresa->setColeccionViajes($viajes);
+                
                     
                     echo "\033[32m*********************************\nLa empresa que está cargada es:\n" . $objEmpresa . "y sus viajes son:\033[0m";
-                    echo $objEmpresa->mostrarViajes();
-            }
+                    $viajes = $objViaje->listar('idempresa = '. $objEmpresa->getIdEmpresa());
+                    foreach ($viajes as $viaje) {
+                        echo $viaje;
+                    }
+            }       
                 do{
 
                 echo "\033[33mIngrese el ID del viaje para cargar sus datos:\033[0m\n";
