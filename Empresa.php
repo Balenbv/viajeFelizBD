@@ -99,6 +99,7 @@ class Empresa{
 
         $arregloEmpresas = null;
         $base = new bdViajeFeliz();
+        $viaje = new Viaje();
         $consultaEmpresas = "SELECT * FROM empresa ";
         if ($consulta != "") {
             $consultaEmpresas = $consultaEmpresas . ' WHERE ' . $consulta;
@@ -109,7 +110,7 @@ class Empresa{
                 $arregloEmpresas = array();
                 while ($row2 = $base->Registro()) {
                     $obj = new Empresa();
-                    $array = ['idEmpresa' => $row2['idempresa'], 'enombre' => $row2['enombre'], 'edireccion' => $row2['edireccion'], 'coleccionViajes' => $this->getColeccionViajes()];
+                    $array = ['idEmpresa' => $row2['idempresa'], 'enombre' => $row2['enombre'], 'edireccion' => $row2['edireccion'], 'coleccionViajes' => $viaje->listar('idempresa = ' . $row2['idempresa'])];
                     //idempresa enombre edireccion
                     $obj->cargar($array);
                     array_push($arregloEmpresas, $obj);
@@ -187,13 +188,10 @@ class Empresa{
     }
 
     public function mostrarViajes(){
-        print_r($this->getColeccionViajes());
         $coleccionViajes = $this->getColeccionViajes();
-        $mostrar = "Viajes de la empresa: \n";
-        $i=1;
+        $mostrar = " ";
         foreach ($coleccionViajes as $viaje) {
-            $mostrar .= $viaje . "nro: $i\n";
-            $i++;
+            $mostrar .= $viaje ."\n";
         }
         return $mostrar;
     }

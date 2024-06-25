@@ -156,7 +156,7 @@ class ResponsableV extends Persona
     }
     public function __toString()
     {
-        $txt = "-------------------\n";
+        $txt = "-------------------\nEl responsable de este viaje:\n";
         $txt .= parent::__toString() ."\n";
         $txt .= "Numero empleado " . $this->getNumeroEmpleado()."\n";
         $txt .= "Numero Licencia " . $this->getNumeroLicencia();

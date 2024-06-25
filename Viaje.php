@@ -123,7 +123,8 @@ class Viaje
                     $this->setDestino($row2['vdestino']);
                     $this->setCantidadMaximaPasajeros($row2['vcantmaxpasajeros']);
                     $this->setobjEmpresa($objEmpresa);
-                    $this->setResponsableV($objResponsableV); 
+                    $this->setResponsableV($objResponsableV);
+                    $this->setColeccionPasajero($objPasajero->Listar("idviaje = " . $row2['idviaje']));
                     $resp = true;
                 }
             } else {
@@ -201,7 +202,7 @@ class Viaje
     {
         $resp = false;
         $base = new bdViajeFeliz();
-        $consultaModifica = "UPDATE viaje SET vdestino ='{$this->getDestino()}', vcantmaxpasajeros = {$this->getCantidadMaximaPasajeros()}, idempresa = {$this->getobjEmpresa()}, rnumeroempleado = {$this->getResponsableV()->getNumeroEmpleado()} WHERE idviaje = {$this->getIdViaje()}";
+        $consultaModifica = "UPDATE viaje SET vdestino ='{$this->getDestino()}', vcantmaxpasajeros = {$this->getCantidadMaximaPasajeros()}, idempresa = {$this->getobjEmpresa()->getIdEmpresa()}, rnumeroempleado = {$this->getResponsableV()->getNumeroEmpleado()} WHERE idviaje = {$this->getIdViaje()}";
         //objEmpleado
 
         if ($base->Iniciar()) {
@@ -228,6 +229,8 @@ class Viaje
 
             if($responsable->modificar()){
                 $bandera = true;
+                $responsable->Buscar($datos['numeroEmpleado']);
+                $this->setResponsableV($responsable);
             }else{
                 $this->setmensajeoperacion($base->getError());
             }
@@ -302,14 +305,16 @@ class Viaje
         return $resp;
     }
 
-    public function existePersona($dni){
+    public function existePasajero($dni){
         $base = new bdViajeFeliz();
-        $consulta = "SELECT * FROM persona WHERE documento = " . $dni;
+        $objPasajero = new Pasajero();
+        $consulta = "SELECT * FROM pasajero WHERE pdocumento = " . $dni;
         $resp = false;
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
                 if ($row2 = $base->Registro()) {
+                    $objPasajero->Buscar($dni);
                     $resp = true;
                 }
             } else {
@@ -355,13 +360,9 @@ class Viaje
 
             $pasajero = new Pasajero();
             $pasajero->cargar($datos);
+            $pasajero->modificar();
 
-            if($pasajero->modificar()){
-                $bandera = true;
-            }else{
-                $this->setmensajeoperacion($base->getError());
-            }
-
+            $this->setColeccionPasajero($pasajero->listar("idviaje = " . $this->getIdViaje()));
         }else{
             $this->setmensajeoperacion($base->getError());
         }
@@ -371,15 +372,16 @@ class Viaje
 
 
 
-    public function eliminarPasajero($datos){
+    public function eliminarPasajero($dni){
         $base = new bdViajeFeliz();
         $resp = false;
         $pasajero = new Pasajero();
 
         if ($base->Iniciar()) {
-            $pasajero->cargar($datos);
+            $pasajero->Buscar($dni);
             $pasajero->eliminar();
-
+            $this->setColeccionPasajero($pasajero->listar("idviaje = " . $this->getIdViaje()));
+            $resp = true;
         } else {
             $this->setmensajeoperacion($base->getError());
         }
@@ -450,9 +452,18 @@ class Viaje
         return $resp;
     }
 
+    public function mostrarPasajeros(){
+        $coleccionPasajeros = $this->getColeccionObjsPasajeros();
+        $mostrar = " ";
+        foreach ($coleccionPasajeros as $pasajero) {
+            $mostrar .= "\n\033[0;35m\n" . $pasajero . "\n---------------------\033[0m";
+        }
+        return $mostrar;
+    }
+
     public function __toString()
     {
-        return "\n************\nNumero del encargado de este viaje: {$this->getResponsableV()}\nDatos del viaje:\ncodigo del viaje: {$this->getIdViaje()}\ndestino: {$this->getDestino()}\ncantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}\n************\n";
+        return "\n\033[0;34m\n{$this->getResponsableV()}\n-------------------\n\033[0;33m************\nDatos del viaje:\ncodigo del viaje: {$this->getIdViaje()}\ndestino: {$this->getDestino()}\ncantidad Maxima de pasajeros: {$this->getCantidadMaximaPasajeros()}\n************\033[0m";
     }
-    
+      
 }
