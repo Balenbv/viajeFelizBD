@@ -103,20 +103,11 @@ class ResponsableV extends Persona
         $resp = false;
     
         if(parent::insertar()){
-            echo "entro\n";
             $consultaInsertar = "INSERT INTO responsable(rdocumento, rnumerolicencia) VALUES ('".parent::getDocumento()."','".$this->getNumeroLicencia()."')";
             if($base->Iniciar()){
-                echo "entro2\n";
-                if($base->Ejecutar($consultaInsertar)){
-                    echo "entro3\n";
-                    
-                    $id = $base->devuelveIDInsercion();
-                    if($id !== null) {
-                        $this->setNumeroEmpleado($id);
-                        $resp = true;
-                    } else {
-                        $this->setmensajeoperacion($base->getError());
-                    }
+                if($id = $base->devuelveIDInsercion($consultaInsertar)){
+                    $this->setNumeroEmpleado($id);
+                    $resp =  true;
                 } else {
                     $this->setmensajeoperacion($base->getError());
                 }

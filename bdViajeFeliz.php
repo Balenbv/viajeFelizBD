@@ -104,16 +104,18 @@ class bdViajeFeliz{
      * @param string $consulta
      * @return int id de la tupla insertada
      */
-    public function devuelveIDInsercion(){
+    public function devuelveIDInsercion($consulta){
         $resp = null;
         unset($this->ERROR);
-        if ($this->RESULT = mysqli_query($this->CONEXION, "SELECT LAST_INSERT_ID()")){
+        $this->QUERY = $consulta;
+        if ($this->RESULT = mysqli_query($this->CONEXION,$consulta)){
             $id = mysqli_insert_id($this->CONEXION);
-            $resp = $id;
+            $resp =  $id;
         } else {
-            $this->ERROR = mysqli_errno($this->CONEXION) . ": " . mysqli_error($this->CONEXION);
+            $this->ERROR =mysqli_errno( $this->CONEXION) . ": " . mysqli_error( $this->CONEXION);
+           
         }
-        return $resp;
+    return $resp;
     }
     
 }

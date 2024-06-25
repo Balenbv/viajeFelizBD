@@ -183,18 +183,16 @@ class Viaje
     {
         $base = new bdViajeFeliz();
         $resp = false;
-        echo $this->getobjEmpresa();
         $consultaInsertar = "INSERT INTO viaje(vdestino, vcantmaxpasajeros,idempresa,rnumeroempleado) VALUES 
         ('" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "','" . $this->getobjEmpresa()->getIdEmpresa() . "','" . $this->getResponsableV()->getNumeroEmpleado(). "')";
         
         if ($base->Iniciar()) {
-            if ($base->devuelveIDInsercion($consultaInsertar)) {
+            if ($id = $base->devuelveIDInsercion($consultaInsertar)) {
+                $this->setIdViaje($id);
                 $resp = true;
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
-        } else {
-            $this->setmensajeoperacion($base->getError());
         }
         return $resp;
     }

@@ -128,14 +128,12 @@ class Empresa{
         $resp = false;
         $consultaInsertar = "INSERT INTO empresa(enombre, edireccion) VALUES ('" . $this->getNombre() . "','" . $this->getDireccion() . "')";
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaInsertar)){
-                $this->setIdEmpresa($base->devuelveIDInsercion());
+            if ($id = $base->devuelveIDInsercion($consultaInsertar)) {
+                $this->setIdEmpresa($id);
                 $resp = true;
             } else {
-                $this->setMensajeOperacion($base->getError());
+                $this->setmensajeoperacion($base->getError());
             }
-        } else {
-            $this->setMensajeOperacion($base->getError());
         }
         return $resp;
     }

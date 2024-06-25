@@ -457,13 +457,35 @@ do {
                 echo "Ingrese su destino: ";
                 $destinoViaje = trim(fgets(STDIN));
                 
-                echo "Ingrese la cantidad maxima de pasajeros: ";
+                echo "\033[41mIngrese la cantidad maxima de pasajeros: \033[0m";
                 $cantidadMaximaPasajerosViaje = trim(fgets(STDIN));
 
                 if ($cantidadMaximaPasajerosViaje < 0 || !is_numeric($cantidadMaximaPasajerosViaje) || $destinoViaje == "" || is_numeric($destinoViaje) ) {
                     echo "Datos invalidos\n";
                 }
             } while ($cantidadMaximaPasajerosViaje < 0 || !is_numeric($cantidadMaximaPasajerosViaje) || $destinoViaje == "" || is_numeric($destinoViaje));
+
+                
+            $datosEmpresa = ['idEmpresa' => null,'enombre' => $nombreEmpresa, 'edireccion' => $direccionEmpresa, 'coleccionViajes' => []];
+            echo "1";
+            $objEmpresa->cargar($datosEmpresa);
+            echo "2";
+            $objEmpresa->insertar();
+            echo "3";
+            $datosResponsable = ['documento' => $numeroDocumentoResponsable, 'rnumeroEmpleado' => null, 'rnumeroLicencia' => $numeroLicenciaResponsable, 'nombre' => $nombreResponsable, 'apellido' => $apellidoResponsable, 'ptelefono' => $numeroTelefonoResponsable];
+            $objResponsable->cargar($datosResponsable);
+            echo "4";
+            $objResponsable->insertar();
+            echo "5";
+
+            $datosViaje = ['idViaje' => null, 'destino' => $destinoViaje, 'cantidadMaximaPasajeros' => $cantidadMaximaPasajerosViaje, 'objEmpresa' => $objEmpresa, 'objEmpleado' => $objResponsable, 'coleccionPasajeros' => []];
+            echo "AAAAAAAAAASDASDASDASDASDASD";
+            $objViaje->cargar($datosViaje);
+            echo "se cargo el viaje\n";
+            $objViaje->insertar();
+            echo "se inserto el viaje\n";
+            echo $objViaje->getIdViaje();
+
 
             echo "\033[44m----| CARGAMOS EL PASAJERO DEL VIAJE |----\033[0m\n";
             $coleccionPasajeros = [];
@@ -498,34 +520,17 @@ do {
                     }
                 } while ($documentoPasajero == $numeroDocumentoResponsable || !is_numeric($documentoPasajero));
 
-                $datosPasajero = ['nombre' => $nombrePasajero, 'apellido' => $apellidoPasajero, 'documento' => $documentoPasajero, 'ptelefono' => $numeroTelefonoPasajero, 'idViaje' => null];
+                $datosPasajero = ['nombre' => $nombrePasajero, 'apellido' => $apellidoPasajero, 'documento' => $documentoPasajero, 'ptelefono' => $numeroTelefonoPasajero, 'idViaje' => $objViaje->getIdViaje()];
                 array_push($coleccionPasajeros, $datosPasajero);
             }
 
-            $datosEmpresa = ['enombre' => $nombreEmpresa, 'edireccion' => $direccionEmpresa, 'coleccionViajes' => []];
-            $objEmpresa->cargar($datosEmpresa);
-            $objEmpresa->insertar();
-
-            $datosResponsable = ['documento' => $numeroDocumentoResponsable, 'rnumeroEmpleado' => null, 'rnumeroLicencia' => $numeroLicenciaResponsable, 'nombre' => $nombreResponsable, 'apellido' => $apellidoResponsable, 'ptelefono' => $numeroTelefonoResponsable];
-            $objResponsable->cargar($datosResponsable);
-
-            $objResponsable->insertar();
-
-
-            $datosViaje = ['idViaje' => null, 'destino' => $destinoViaje, 'cantidadMaximaPasajeros' => $cantidadMaximaPasajerosViaje, 'objEmpresa' => $objEmpresa, 'objEmpleado' => $objResponsable, 'coleccionPasajeros' => $coleccionPasajeros];
-            echo "\n";
-            $objViaje->cargar($datosViaje);
-            echo "se cargo el viaje\n";
-            $objViaje->insertar();
-            echo "se inserto el viaje\n";
-            echo $objViaje->getIdViaje();
             
-
-            foreach ($coleccionPasajeros as $pasajero) {
-                $objPasajero->cargar($pasajero);
-                $objPasajero->insertar();
-            }
-
+            
+            // foreach ($coleccionPasajeros as $pasajero) {
+            //     $objPasajero->cargar($pasajero);
+            //     $objPasajero->insertar();
+            // }
+            echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
             if ($objEmpresa->listar()){
                 echo "\033[42mSe cargó correctamente✅\033[0m\n";
                 echo "los datos de la empresa y el viaje creado son:\n";
