@@ -413,16 +413,19 @@ class Viaje
     } 
 
     public function mostrarResponsable(){
-        
+        echo "entre en el reponsable\n";
+
         $base = new bdViajeFeliz();
         $objResponsableV = null;
         
         if($base->iniciar()){
-            $responsable = new ResponsableV();
-            if($coleccionResponsables = $responsable->listar()){
+            $objResponsable = new ResponsableV();
+            if($coleccionResponsables = $objResponsable->listar()){
                 $i=0;
-                while($objResponsableV == null && $i<count($coleccionResponsables)){
-                    if($coleccionResponsables[$i]->getNumeroEmpleado() == $this->getResponsableV()){
+                while($i < count($coleccionResponsables) && $objResponsableV == null){                    
+                    if($coleccionResponsables[$i]->getNumeroEmpleado() == $this->getResponsableV()->getNumeroEmpleado()){
+
+                        echo "encontre el reponsable\n";
                         $objResponsableV = $coleccionResponsables[$i];  
                     }
                     $i++;
