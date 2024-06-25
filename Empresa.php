@@ -189,6 +189,7 @@ class Empresa{
 
     public function mostrarViajes(){
         $coleccionViajes = $this->getColeccionViajes();
+        print_r($coleccionViajes);
         $mostrar = " ";
         foreach ($coleccionViajes as $viaje) {
             $mostrar .= $viaje ."\n";

@@ -124,6 +124,9 @@ class Viaje
                     $this->setCantidadMaximaPasajeros($row2['vcantmaxpasajeros']);
                     $this->setobjEmpresa($objEmpresa);
                     $this->setResponsableV($objResponsableV);
+                    echo "estamos en la funcion viaje buscar:\n";
+                    print_r($objPasajero->Listar("idviaje = " . $row2['idviaje']));
+
                     $this->setColeccionPasajero($objPasajero->Listar("idviaje = " . $row2['idviaje']));
                     $resp = true;
                 }

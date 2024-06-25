@@ -177,7 +177,7 @@ do {
                 
                 switch($opcionDatos) {
 
-                    case 1: /* menu viaje */
+                    case 1: 
                         $textoFallo = "No existe el viaje\n";
                         do {
                             if ($objViaje->Buscar($idViaje)) {
@@ -189,7 +189,6 @@ do {
 
                                 switch ($opcionViaje) {
                                     case 1: 
-                                           /// ELIMINAR VIAJE PRE CARGADO
                                            /////////////////////////////////////
                                            //Cargar empresa precargada -> menu viaje -> eliminar viaje
                                            /////////////////////////////////////
@@ -247,10 +246,11 @@ do {
                             menuPasajero();
                             $opcionPasajero = trim(fgets(STDIN));
 
+
+                             /////////////////////////////////////
+                            //Cargar empresa precargada -> menu pasajero
+                            /////////////////////////////////////
                             switch ($opcionPasajero) {
-                                        /////////////////////////////////////
-                                        //Cargar empresa precargada -> menu pasajero
-                                        /////////////////////////////////////
                                 case 1:
                                         /////////////////////////////////////
                                         //Cargar empresa precargada -> menu pasajero -> agregar pasajero
@@ -522,9 +522,6 @@ do {
             
             if ($objEmpresa->listar()){
                 echo "\033[42mSe cargó correctamente✅\033[0m\n";
-                echo "los datos de la empresa y el viaje creado son:\n";
-                echo $objEmpresa;
-                echo $objEmpresa->mostrarViajes();
             } else {
                 echo "\033[41mNo se cargó\033[0m\n";
             }
@@ -532,16 +529,25 @@ do {
             do {
                 echo "\n";
                 echo "*********************************\n";
-                echo "\033[32mLos viajes de la empresa son:\033[0m";
+                echo "\033[32mLos viajes de la empresa son:\033[0m\n";
+                echo "la linea es:".__LINE__;
+
                 echo $objEmpresa->mostrarViajes();
-                
+
+
                 do{
+
                 echo "Ingrese el ID del viaje para cargar sus datos:";
                 $idViaje = trim(fgets(STDIN));
+
                 if(!$objViaje->Buscar($idViaje)){
+
                     echo "No se encontro el viaje\n";
+
                 } else {
+
                     echo "\e[32mSe encontró el viaje ✅\e[0m\n";
+                    
                 }
                 } while($objViaje->Buscar($idViaje) == false);
                 
@@ -552,6 +558,7 @@ do {
                     case 1: /*carga VIAJE*/
                         do {
                             
+                         echo "linea del objViaje".__LINE__ ; 
                          echo $objViaje;
                         
 
@@ -608,6 +615,7 @@ do {
                                             echo "Probablemente no existe una empresa creada \n";
                                         }
 
+                                        
                             break;
                         }
                         } while ($opcionViaje != 3);
@@ -860,10 +868,26 @@ do {
                 $objPasajero->insertar();
 
             }
+            echo "la coleccion entrante es :\n";
+            print_r($coleccionPasajeros);
             $objViaje->setColeccionPasajero($coleccionPasajeros);
-            $objEmpresa->setColeccionViajes([$objViaje]);
-            
-            echo  $objViaje->listar($objViaje->getIdViaje())[0]."\n";
+            echo "la coleccion entrante es:\n";
+            print_r($objViaje);
+
+            $coleccionViajes = $objEmpresa->getColeccionViajes();
+            array_push($coleccionViajes, $objViaje);
+            $this->setColeccionViajes($coleccionViajes);
+            ////////////////////////////////////////////////////////////////////////////////////////////////////7$objEmpresa->setColeccionViajes($objViaje);
+        
+           // echo  $objViaje->listar($objViaje->getIdViaje())[0]."\n";
+
+
+            if ($coleccionEmpresas = $objEmpresa->listar()){
+                $textoEmpresas = '';
+                $i=0;
+                print_r($coleccionEmpresas);
+                
+            }
 
 
                   do{

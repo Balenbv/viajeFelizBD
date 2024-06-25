@@ -84,6 +84,11 @@ if ($bd->Iniciar()){
     }
 
 
+    
+
+
+
+
 
     if ($objEmpresa->listar()){
         echo "\033[42mSe cargo correctamente✅\033[0m\n";
@@ -100,7 +105,7 @@ if ($bd->Iniciar()){
         echo "\033[41mNo se cargo\033[0m\n";
     }
     
- 
+
 
 
 
