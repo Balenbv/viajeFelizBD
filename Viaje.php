@@ -186,11 +186,10 @@ class Viaje
         echo $this->getobjEmpresa();
         $consultaInsertar = "INSERT INTO viaje(vdestino, vcantmaxpasajeros,idempresa,rnumeroempleado) VALUES 
         ('" . $this->getDestino() . "','" . $this->getCantidadMaximaPasajeros() . "','" . $this->getobjEmpresa()->getIdEmpresa() . "','" . $this->getResponsableV()->getNumeroEmpleado(). "')";
-
+        
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaInsertar)) {
+            if ($base->devuelveIDInsercion($consultaInsertar)) {
                 $resp = true;
-                $this->setIdViaje($base->devuelveIDInsercion());
             } else {
                 $this->setmensajeoperacion($base->getError());
             }

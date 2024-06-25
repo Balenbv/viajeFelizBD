@@ -26,7 +26,7 @@ if ($bd->Iniciar()){
     $objEmpresa = new Empresa();
     $coleccionPasajeros = [];
 
-    $datosEmpresa = ['enombre' => 'fiat', 'edireccion' => 'av sanjuan', 'coleccionViajes' => []];
+    $datosEmpresa = ['idEmpresa'=> null,'enombre' => 'fiat', 'edireccion' => 'av sanjuan', 'coleccionViajes' => []];
     $objEmpresa->cargar($datosEmpresa);
     $objEmpresa->insertar();
 
@@ -35,7 +35,7 @@ if ($bd->Iniciar()){
     $objResponsable->cargar($datosResponsable);
     $objResponsable->insertar();
 
-
+    //echo $objEmpresa;
 
     $datosViaje = ['idViaje' => null, 'destino' => 'londres', 'cantidadMaximaPasajeros' => 10, 'objEmpresa' => $objEmpresa, 'objEmpleado' => $objResponsable, 'coleccionPasajeros' => $coleccionPasajeros];
     

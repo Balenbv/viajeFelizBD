@@ -67,7 +67,7 @@ class Empresa{
 
     public function cargar($datos)
     {
-        //$this->setIdEmpresa($datos['idEmpresa']);
+        $this->setIdEmpresa($datos['idEmpresa']);
         $this->setNombre($datos['enombre']);
         $this->setDireccion($datos['edireccion']);
         $this->setColeccionViajes($datos['coleccionViajes']);
@@ -128,8 +128,7 @@ class Empresa{
         $resp = false;
         $consultaInsertar = "INSERT INTO empresa(enombre, edireccion) VALUES ('" . $this->getNombre() . "','" . $this->getDireccion() . "')";
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaInsertar)) {
-                echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA". $base->devuelveIDInsercion($consultaInsertar);
+            if ($base->Ejecutar($consultaInsertar)){
                 $this->setIdEmpresa($base->devuelveIDInsercion());
                 $resp = true;
             } else {
