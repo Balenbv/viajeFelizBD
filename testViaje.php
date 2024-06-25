@@ -176,6 +176,7 @@ do {
                 switch($opcionDatos) {
 
                     case 1: /* menu viaje */
+                        $textoFallo = "No existe el viaje\n";
                         do {
                             if ($objViaje->Buscar($idViaje)) {
                                 $viaje = $objViaje->listar()[0];
@@ -201,7 +202,7 @@ do {
                                         $objResponsable->Buscar($objViaje->getResponsableV()->getDocumento());
                                         $objResponsable->eliminar();
                                         $objViaje->eliminar();
-
+                                        $textoFallo = "\n\033[32mEl viaje se eliminó correctamente 😁\033[0m\n";
                                         break;
                                     case 2:
                                            /////////////////////////////////////
@@ -231,11 +232,10 @@ do {
                                         break;
                                 }
                             } else {
-                                echo "\033[/////////////////////////////// \033[0m";
-                                echo "\nNo existen viajes con ese id\n";
-                                echo "\033[/////////////////////////////// \033[0m";
+                                echo $textoFallo;
+                                $opcionViaje = 3;
                             }
-                        } while ($opcionViaje != 3 || !$objViaje->Buscar($idViaje));
+                        } while ($opcionViaje != 3 || $objViaje->Buscar($idViaje));
                         break;
 
                     case 2: /*Cargar Pasajero*/
@@ -390,35 +390,17 @@ do {
 
             /*elimina el viaje el precargado*/
             if ($objEmpresa->listar()) {
-                $consulta = 'DELETE FROM pasajero WHERE 1';
-                if ($bd->Ejecutar($consulta)) {
-                    $consulta = 'DELETE FROM responsable WHERE 1';
+                $tables = ['pasajero', 'responsable', 'persona', 'viaje', 'empresa'];
+                foreach ($tables as $table) {
+                    $consulta = "DELETE FROM $table WHERE 1";
                     if ($bd->Ejecutar($consulta)) {
-                        $consulta = 'DELETE FROM persona WHERE 1';
-                        if ($bd->Ejecutar($consulta)) {
-                            $consulta = 'DELETE FROM viaje WHERE 1';
-                            if ($bd->Ejecutar($consulta)) {
-                                $consulta = 'DELETE FROM empresa WHERE 1';
-                                if ($bd->Ejecutar($consulta)) {
-                                    echo "\033[42mSe eliminaron los datos precargados\n\033[0m";
-                                    $objEmpresa->eliminarEmpresas();
-                                } else {
-                                    echo "\033[41mNo se eliminaron los datos precargados\n\033[0m";
-                                }
-                            }
-                        }
+                        echo "\033[42mSe eliminaron los datos precargados\n\033[0m";
+                    } else {
+                        echo "\033[41mNo se eliminaron los datos precargados\n\033[0m";
                     }
-                    echo "\033[42mSe eliminaron los datos precargados\n\033[0m";
-                } else {
-                    echo "\033[41mNo se eliminaron los datos precargados\n\033[0m";
                 }
+                $objEmpresa->eliminarEmpresas();
             }
-
-
-
-
-
-
 
             echo "\033[42mSe eliminaron los datos precargados\n\033[0m";
             
@@ -431,7 +413,7 @@ do {
                 echo "Ingrese la direccion de la empresa: ";
                 $direccionEmpresa = trim(fgets(STDIN));
                 if ($direccionEmpresa == "" || is_numeric($nombreEmpresa)) {
-                    echo "\033[31mDatos inválidos\nLos datos deben ser numéricos mayores a 0 😕\033[0m\n";
+                    echo "\033[31mDatos inválidos 😕\033[0m\n";
                 }
             } while ($nombreEmpresa == "" || $direccionEmpresa == "" || is_numeric($nombreEmpresa));
 
@@ -486,6 +468,7 @@ do {
             $datosViaje = ['idViaje' => null, 'destino' => $destinoViaje, 'cantidadMaximaPasajeros' => $cantidadMaximaPasajerosViaje, 'objEmpresa' => $objEmpresa, 'objEmpleado' => $objResponsable, 'coleccionPasajeros' => []];
             $objViaje->cargar($datosViaje);
             $objViaje->insertar();
+            $objViaje->setResponsableV($objResponsable);
 
             
             echo "\033[44m----| CARGAMOS EL PASAJERO DEL VIAJE |----\033[0m\n";
@@ -531,13 +514,15 @@ do {
                 $objPasajero->insertar();
 
             }
+            $objViaje->setColeccionPasajero($coleccionPasajeros);
+            $objEmpresa->setColeccionViajes([$objViaje]);
 
             
             if ($objEmpresa->listar()){
                 echo "\033[42mSe cargó correctamente✅\033[0m\n";
                 echo "los datos de la empresa y el viaje creado son:\n";
-                echo $objEmpresa->listar()[0];
-                echo $objViaje->listar()[0];
+                echo $objEmpresa;
+                echo $objEmpresa->mostrarViajes();
             } else {
                 echo "\033[41mNo se cargó\033[0m\n";
             }
@@ -545,12 +530,18 @@ do {
             do {
                 echo "\n";
                 echo "*********************************\n";
-                echo "La empresa que esta cargada es:\n";
+                echo "\033[32mLos viajes de la empresa son:\033[0m";
                 echo $objEmpresa->mostrarViajes();
                 
-
-                echo "Ingrese el ID del viaje para encontrar sus datos:";
+                do{
+                echo "Ingrese el ID del viaje para cargar sus datos:";
                 $idViaje = trim(fgets(STDIN));
+                if(!$objViaje->Buscar($idViaje)){
+                    echo "No se encontro el viaje\n";
+                } else {
+                    echo "\e[32mSe encontró el viaje ✅\e[0m\n";
+                }
+                } while($objViaje->Buscar($idViaje) == false);
                 
                 menuEmpresa();
                 $opcionDatos = trim(fgets(STDIN));
@@ -558,14 +549,10 @@ do {
 
                     case 1: /*carga VIAJE*/
                         do {
-                            if($objViaje->Buscar($idViaje)){
-                                echo $objViaje->listar()[0];
-                            } else{
-                                echo "\n";
-                                echo "\033[41m/////////////////////////////// \033[0m";
-                                echo "\033[31mNo se encontro el viaje\n\033[0m";
-                                echo "\033[41m//////////////////////////////// \033[0m";
-                            }
+                            
+                         echo $objViaje;
+                        
+
                         menuViaje();
                         $opcionViaje = trim(fgets(STDIN));
                         switch($opcionViaje){
@@ -577,15 +564,14 @@ do {
                                 echo "3) Eliminar el viaje:\n";
                                 echo "Para eliminar el viaje, vamos a tener que borrar el responsable y los pasajeros";
 
-                                $objPersona->Buscar($numeroDocumentoResponsable);
-                                $objPersona->eliminar();
-
-                                $coleccionPasajeros = $objPasajero->listar("idviaje = '". $idViaje."'");
+                                $objViaje->eliminarResponsable($objViaje->getResponsableV()->getDocumento());
+                                $coleccionPasajeros = $objViaje->getColeccionObjsPasajeros();
 
                                 foreach ($coleccionPasajeros as $pasajeroUnico) {
-                                    $objPasajero->Buscar($pasajeroUnico->getDocumento());
-                                    $objPasajero->eliminar();
+                                    $objViaje->eliminarPasajero($pasajeroUnico->getDocumento());
                                 }
+
+                                echo "\033[31mSe eliminó el viaje y el responsable correctamente!! ✅\033[0m";
 
                                 if($objViaje->eliminar()){
                                     echo "\nSe eliminó el viaje y el responsable correctamente!! ✅";
@@ -675,8 +661,7 @@ do {
                                 echo "2) Eliminar pasajero\n";
                                 echo "Ingrese el DNI del pasajero que quiere eliminar:";
                                 $dniPasajero = trim(fgets(STDIN));
-                                $objPasajero->Buscar($dniPasajero);
-                                $objPasajero->eliminar();
+                                $objViaje->eliminarPasajero($dniPasajero);
                                 
                             }else if($opcionPasajero == "3"){
                              //////////////////////////////////////////////////////////
@@ -709,10 +694,9 @@ do {
                         do {
                             
 
-                            echo $objViaje->getResponsableV();
-                            //echo $objViaje->mostrarResponsable();
+                            echo "\033[34m".$objViaje->getResponsableV()."\033[0m";
                             
-                            echo "\n-------------------\n";
+                            echo "\033[34m\n-------------------\n\033[0m";
 
                             menuResponsable();
                             $opcionResponsable = trim(fgets(STDIN));      

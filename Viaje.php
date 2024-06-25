@@ -440,14 +440,16 @@ class Viaje
     return $objResponsableV;
     }
         
-    public function eliminarResponsable($datos){
+    public function eliminarResponsable($dni){
         $base = new bdViajeFeliz();
         $resp = false;
         $responsable = new responsableV();
     
         if ($base->Iniciar()) {
-            $responsable->cargar($datos);
+            $responsable->Buscar($dni);
             $responsable->eliminar();
+            $this->setResponsableV($responsable);
+            $resp = true;
         } else {
             $this->setmensajeoperacion($base->getError());
         }
