@@ -207,6 +207,8 @@ class Viaje
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
+                $this->setDestino($this->getDestino());
+                $this->setCantidadMaximaPasajeros($this->getCantidadMaximaPasajeros());
             } else {
                 $this->setmensajeoperacion($base->getError());
             }

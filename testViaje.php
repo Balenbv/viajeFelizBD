@@ -180,8 +180,7 @@ do {
                         $textoFallo = "No existe el viaje\n";
                         do {
                             if ($objViaje->Buscar($idViaje)) {
-                                $viaje = $objViaje->listar()[0];
-                                echo "\033[0;33m************\nDatos del viaje:\ncodigo del viaje: {$viaje->getIdViaje()}\ndestino: {$viaje->getDestino()}\ncantidad Maxima de pasajeros: {$viaje->getCantidadMaximaPasajeros()}\n************\033[0m";
+                                echo "\033[0;33m************\nDatos del viaje:\ncodigo del viaje: {$objViaje->getIdViaje()}\ndestino: {$objViaje->getDestino()}\ncantidad Maxima de pasajeros: {$objViaje->getCantidadMaximaPasajeros()}\n************\033[0m";
 
                                 menuViaje();
                                 $opcionViaje = trim(fgets(STDIN));
@@ -285,7 +284,7 @@ do {
                                         $datosPasajero = ['nombre' => $nombrePasajero, 'apellido' => $apellidoPasajero, 'documento' => $documentoPasajero, 'ptelefono' => $telefonoPasajero, 'idViaje' => $idViaje];
                                         $objViaje->crearPasajero($datosPasajero);
                                     } else {
-                                        echo "No se pueden agregar mas pasajeros\n";
+                                        echo "\033[31mNo se pueden agregar más pasajeros porque el viaje esta lleno\n\033[0m";
                                     }
                                     break;
                                 case 2:
@@ -755,19 +754,19 @@ do {
         /////////////////////////
         /// 3) agregar viaje  
         /////////////////////////
-                    if ($objEmpresa->listar()){
+                if ($objEmpresa->listar()){
                 echo "*********************************\n";
-                echo "Las empresas creadas son:\n";
+                echo "\033[36mLas empresas creadas son:\n";
                 $empresas = $objEmpresa->listar();
                 $txt = "";
                 foreach($empresas as $empresa){
                     $txt .= $empresa . "\n";
                 }
-                echo $txt;
+                echo $txt. "\033[0m";
 
 
                 do{
-                echo "Ingrese el ID de la empresa que va a pertenecer el Viaje:\n";
+                echo "\033[33mIngrese el ID de la empresa que va a pertenecer el Viaje:\n\033[0m";
                 $idEmpresa = trim(fgets(STDIN));
                 $objEmpresaEncontrado = new Empresa();
                 $objEmpresaEncontrado = $objEmpresa->listar($idEmpresa)[0];
@@ -955,7 +954,7 @@ do {
                                     }
                                 }while($cantidadMaximaPasajerosNueva < 0 || !is_numeric($cantidadMaximaPasajerosViaje));
 
-                                echo "Las empresas creadas son:\n";
+                                echo "\033[36mLas empresas creadas son:\033[0m\n";
                                 $empresas = $objEmpresa->listar();
                                 $txt = "";
                                 foreach($empresas as $empresa){
@@ -963,7 +962,7 @@ do {
                                 }
                                 echo $txt;
 
-                                echo "Ingrese el ID nuevo de empresa:\n";
+                                echo "Ingrese el ID de la empresa a la que va a pertenecer:\n";
                                 $idEmpresaNuevo = trim(fgets(STDIN));
 
                                 if ($idEmpresaNuevo < 1 || $objEmpresa->Buscar($idEmpresaNuevo) == false){
