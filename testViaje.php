@@ -85,7 +85,7 @@ do {
     $opcionPrincipal = trim(fgets(STDIN));
     
     switch ($opcionPrincipal) {
-        case 1: //CARGAR EMPRESA RECARGADA
+        case 1:
             /////////////////////////////////
             //DATOS PRECARGADOS
             ////////////////////////////////
@@ -199,6 +199,8 @@ do {
                                             $objPasajero->eliminar();
                                         }
                                         $objResponsable->Buscar($objViaje->getResponsableV()->getDocumento());
+                                        $objPersona->Buscar($objViaje->getResponsableV()->getDocumento());
+                                        $objPersona->eliminar();
                                         $objResponsable->eliminar();
                                         $objViaje->eliminar();
                                         $textoFallo = "\n\033[32mEl viaje se eliminó correctamente 😁\033[0m\n";
@@ -239,7 +241,7 @@ do {
                         } while ($opcionViaje != 3);
                         break;
 
-                    case 2: /*Cargar Pasajero*/
+                    case 2: 
                         do {
                             if($objViaje->getColeccionObjsPasajeros() == []){
                                 echo "\033[31mEste viaje no tiene pasajeros creados😅\033[0m\n";
@@ -336,7 +338,7 @@ do {
                         break;
                         
                         
-                    case 3:/*Cargar Responsable*/
+                    case 3:
                           /////////////////////////////////////
                           //Cargar empresa precargada -> menu responsable
                           /////////////////////////////////////
@@ -558,7 +560,7 @@ do {
                                 
                 switch ($opcionDatos) {
 
-                    case 1: /*carga VIAJE*/
+                    case 1: 
                         do {
                             if ($objViaje->Buscar($idViaje)) {
                                 $viaje = $objViaje->listar()[0];
@@ -570,7 +572,6 @@ do {
                                 if ($objViaje->Buscar($idViaje)){
                                     echo $objViaje;
                                     echo "3) Eliminar el viaje:\n";
-                                    //$objViaje->eliminarResponsable($objViaje->getResponsableV()->getDocumento());
                                     $coleccionPasajeros = $objViaje->getColeccionObjsPasajeros();
     
                                     foreach ($coleccionPasajeros as $pasajeroUnico) {
@@ -699,7 +700,7 @@ do {
                         } while ($opcionPasajero != 4);
                         break;
 
-                    case 3:/*Cargar Responsable*/
+                    case 3:
                              //////////////////////////////////////////////////////////
                             /// 2) empresa desde 0 ---> menu responsable 
                             //////////////////////////////////////////////////////////
@@ -754,8 +755,7 @@ do {
         /////////////////////////
         /// 3) agregar viaje  
         /////////////////////////
-            /** CREAR VIAJE*/
-            if ($objEmpresa->listar()){
+                    if ($objEmpresa->listar()){
                 echo "*********************************\n";
                 echo "Las empresas creadas son:\n";
                 $empresas = $objEmpresa->listar();
@@ -872,10 +872,6 @@ do {
             array_push($coleccionViajes,$objViaje);
             $objEmpresa->setColeccionViajes($coleccionViajes);
 
-            
-
-            //////////////////////////7$objEmpresa->setColeccionViajes($objViaje);
-           // echo  $objViaje->listar($objViaje->getIdViaje())[0]."\n";
 
                   do{//while grande
                     
@@ -924,7 +920,6 @@ do {
                             $idViajeEliminar = trim(fgets(STDIN));
                             
                             if ($objViaje->Buscar($idViajeEliminar)){
-                                echo $objViaje."\n";
                                 echo "3) Eliminar el viaje:\n";
                                 //$objViaje->eliminarResponsable($objViaje->getResponsableV()->getDocumento());
                                 $coleccionPasajeros = $objViaje->getColeccionObjsPasajeros();
@@ -947,14 +942,19 @@ do {
                         //////////////////////////////////////////////////////////
                         /// 3) agregar viaje -> menu viaje -> modificar viaje
                         //////////////////////////////////////////////////////////
-                                // MUESTRA 2 VECES EL VIAJE
                             echo "2) Modificar viaje:\n";   
                                 do{
                                 echo "Ingrese el nuevo destino del viaje: ";
                                 $destinoNuevo = trim(fgets(STDIN));
-                                echo "Ingrese la cantidad maxima de pasajeros nuevo: ";
-                                
-                                $cantidadMaximaPasajerosNueva = trim(fgets(STDIN)); // VALIDAR CANTIDAD MAXIMA > A 0
+
+                                do{
+                                    echo "Ingrese la cantidad maxima de pasajeros nuevo: ";
+                                    $cantidadMaximaPasajerosNueva = trim(fgets(STDIN));
+                                    if($cantidadMaximaPasajerosViaje < 0 || !is_numeric($cantidadMaximaPasajerosViaje)){
+                                        echo "Datos invalidos\n";
+                                    }
+                                }while($cantidadMaximaPasajerosNueva < 0 || !is_numeric($cantidadMaximaPasajerosViaje));
+
                                 echo "Las empresas creadas son:\n";
                                 $empresas = $objEmpresa->listar();
                                 $txt = "";
