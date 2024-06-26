@@ -149,16 +149,14 @@ class Viaje
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
                 $arreglo = [];
-                
-                $obj = new Viaje();
-                $objResponsableV = new ResponsableV();
-                $objEmpresa = new Empresa();
-                $objPasajero = new Pasajero();
-
                 while ($row2 = $base->Registro()) {
+                    $obj = new Viaje();
+                    $objResponsableV = new ResponsableV();
+                    $objEmpresa = new Empresa();
+                    $objPasajero = new Pasajero();
                     $objResponsableV->Buscar($row2['rnumeroempleado']);
                     $objEmpresa->Buscar($row2['idempresa']);
-
+                    $obj->Buscar($row2['idviaje']);
                     $datos = [
                         'idViaje' => $row2['idviaje'],
                         'destino' => $row2['vdestino'],

@@ -186,12 +186,8 @@ do {
 
                                 menuViaje();
                                 $opcionViaje = trim(fgets(STDIN));
-
                                 switch ($opcionViaje) {
                                     case 1: 
-
-
-
                                            /////////////////////////////////////
                                            //Cargar empresa precargada -> menu viaje -> eliminar viaje
                                            /////////////////////////////////////
@@ -234,12 +230,14 @@ do {
                                             echo "Probablemente no existe una empresa creada \n";
                                         }
                                         break;
+                                    case 3:
+                                        break;
                                 }
                             } else {
                                 echo $textoFallo;
                                 $opcionViaje = 3;
                             }
-                        } while ($opcionViaje != 3 || $objViaje->Buscar($idViaje));
+                        } while ($opcionViaje != 3);
                         break;
 
                     case 2: /*Cargar Pasajero*/
@@ -521,8 +519,6 @@ do {
             $objEmpresa->setColeccionViajes($coleccionViajes);
             print_r($coleccionViajes);
 
-
-            
             if ($objEmpresa->listar()){
                 echo "\033[42mSe cargó correctamente✅\033[0m\n";
             } else {
@@ -539,12 +535,10 @@ do {
                     echo "\n";
                     echo "*********************************\n";
                     echo "\033[32mLos viajes de la empresa son:\033[0m\n";
+                    foreach ($viajes as $viaje) {
+                        echo $viaje;
+                    }
                 }
-                
-                foreach ($viajes as $viaje) {
-                    echo $viaje;
-                }
-
                 do{
 
                 echo "Ingrese el ID del viaje para cargar sus datos:";
@@ -619,7 +613,8 @@ do {
                                             echo "Probablemente no existe una empresa creada \n";
                                         }
 
-                                        
+                            case 3:
+                                break;
                             break;
                         }
                         } while ($opcionViaje != 3);
@@ -865,7 +860,6 @@ do {
 
                 $objPasajero->cargar($datosPasajero);
                 $objPasajero->insertar();
-
             }
 
             $objViaje->setColeccionPasajero($coleccionPasajeros);
@@ -906,7 +900,7 @@ do {
                     
                         do{
 
-                        echo "\nIngrese el ID del viaje para agregar:";
+                        echo "\nIngrese el ID del viaje para buscar y cargar:";
                         $idViaje = trim(fgets(STDIN));
 
                         if(!$objViaje->Buscar($idViaje)){
@@ -933,7 +927,6 @@ do {
                             echo "Ingrese el ID del viaje que quiere eliminar:\n";
                             $idViajeEliminar = trim(fgets(STDIN));
                             
-
                             if ($objViaje->Buscar($idViajeEliminar)){
                                 echo $objViaje."\n";
                                 echo "3) Eliminar el viaje:\n";
