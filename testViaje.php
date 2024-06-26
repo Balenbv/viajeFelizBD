@@ -92,7 +92,6 @@ do {
             if ($coleccionEmpresas = $objEmpresa->listar()){
                 $textoEmpresas = '';
                 $i=0;
-                print_r($coleccionEmpresas);
                 foreach ($coleccionEmpresas as $empresa) {
                     if($i % 2 == 0){
                         echo "\033[36mEmpresa numero $i\n" . $empresa . "-------------------\n" . "y sus vuelos son:" . $empresa->mostrarViajes() . "\033[0m";
@@ -242,8 +241,11 @@ do {
 
                     case 2: /*Cargar Pasajero*/
                         do {
-                            echo $objViaje->mostrarPasajeros();
-
+                            if($objViaje->getColeccionObjsPasajeros() == []){
+                                echo "\033[31mEste viaje no tiene pasajeros creados😅\033[0m\n";
+                            } else {
+                                echo $objViaje->mostrarPasajeros();
+                            }
                             menuPasajero();
                             $opcionPasajero = trim(fgets(STDIN));
 
@@ -514,10 +516,8 @@ do {
             }
             $objViaje->setColeccionPasajero($coleccionPasajeros);
             $coleccionViajes = $objEmpresa->getColeccionViajes();
-            print_r($objEmpresa->getColeccionViajes());
             array_push($coleccionViajes,$objViaje);
             $objEmpresa->setColeccionViajes($coleccionViajes);
-            print_r($coleccionViajes);
 
             if ($objEmpresa->listar()){
                 echo "\033[42mSe cargó correctamente✅\033[0m\n";
@@ -541,7 +541,7 @@ do {
                 }
                 do{
 
-                echo "Ingrese el ID del viaje para cargar sus datos:";
+                echo "\nIngrese el ID del viaje para cargar sus datos:";
                 $idViaje = trim(fgets(STDIN));
 
                 if(!$objViaje->Buscar($idViaje)){
@@ -560,7 +560,9 @@ do {
 
                     case 1: /*carga VIAJE*/
                         do {
-
+                            if ($objViaje->Buscar($idViaje)) {
+                                $viaje = $objViaje->listar()[0];
+                                echo "\033[0;33m************\nDatos del viaje:\ncodigo del viaje: {$viaje->getIdViaje()}\ndestino: {$viaje->getDestino()}\ncantidad Maxima de pasajeros: {$viaje->getCantidadMaximaPasajeros()}\n************\033[0m";
                         menuViaje();
                         $opcionViaje = trim(fgets(STDIN));
                         switch($opcionViaje){
@@ -617,7 +619,10 @@ do {
                                 break;
                             break;
                         }
-                        } while ($opcionViaje != 3);
+                        } else{
+                            echo "No se encontro el viaje\n";
+                        }
+                     } while ($opcionViaje != 3);
                         break;
 
                     case 2: 
@@ -864,23 +869,14 @@ do {
 
             $objViaje->setColeccionPasajero($coleccionPasajeros);
             $coleccionViajes = $objEmpresa->getColeccionViajes();
-            print_r($objEmpresa->getColeccionViajes());
             array_push($coleccionViajes,$objViaje);
             $objEmpresa->setColeccionViajes($coleccionViajes);
-            print_r($coleccionViajes);
 
             
 
             //////////////////////////7$objEmpresa->setColeccionViajes($objViaje);
            // echo  $objViaje->listar($objViaje->getIdViaje())[0]."\n";
 
-
-            if ($coleccionEmpresas = $objEmpresa->listar()){
-                $textoEmpresas = '';
-                $i=0;
-                print_r($coleccionEmpresas);
-                
-            }
                   do{//while grande
                     
                         $salir = false;
