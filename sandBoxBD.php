@@ -83,13 +83,7 @@ if ($bd->Iniciar()){
         $objPasajero->insertar();
     }
 
-
     
-
-
-
-
-
     if ($objEmpresa->listar()){
         echo "\033[42mSe cargo correctamente✅\033[0m\n";
         echo "los datos de la empresa y el viaje creado son:\n";
